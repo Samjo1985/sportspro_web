@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sportspro - Live TV</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏆</text></svg>">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* Custom styles for a clean, modern look and feel */
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Updated background with a subtle gradient */
+            background-color: #111827; /* bg-gray-900 */
+            background-image: radial-gradient(circle at top, #1f2937, #111827);
+        }
+
+        /* Marquee Animation */
+        .marquee-content {
+            display: inline-block;
+            white-space: nowrap;
+            animation: marquee 30s linear infinite;
+            padding-left: 100%;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+        
+        /* Style for the active channel icon */
+        .channel-icon.active {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.8); /* Blue glow */
+            border-color: #3B82F6; /* border-blue-500 */
+            background-color: #374151; /* bg-gray-700 */
+        }
+
+        /* Loading Spinner Animation */
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="text-white flex items-center justify-center min-h-screen p-4">
+
+    <div class="w-full max-w-5xl mx-auto">
+        <header>
+            <h1 class="text-4xl sm:text-5xl font-black text-center my-6 sm:my-8 tracking-tight flex items-center justify-center gap-3">
+                <svg class="w-10 h-10 sm:w-12 sm:h-12 text-blue-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M13 18.067V21a1 1 0 0 1-2 0v-2.933a9.006 9.006 0 0 1-5.11-4.787 1 1 0 0 1 1.789-.894 7.005 7.005 0 0 0 10.642 0 1 1 0 0 1 1.789.894A9.006 9.006 0 0 1 13 18.067zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0-6a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM18.887 2.053a1 1 0 0 1 .114 1.414l-2.07 2.07a1 1 0 0 1-1.414-1.414l2.07-2.07a1 1 0 0 1 1.3-.001zM4.999 5.537a1 1 0 0 1-1.414-1.414l2.07-2.07a1 1 0 0 1 1.415 1.415l-2.07 2.07z"/>
+                </svg>
+                <span class="bg-gradient-to-r from-blue-400 via-sky-300 to-blue-400 bg-clip-text text-transparent">
+                    Sportspro
+                </span>
+            </h1>
+        </header>
+
+        <main>
+            <div id="player-container" class="relative w-full aspect-video bg-black rounded-xl shadow-2xl overflow-hidden border-2 border-gray-700 flex items-center justify-center">
+                <video id="video-player" class="w-full h-full" controls poster="https://placehold.co/1280x720/111827/FFFFFF?text=Select+a+Channel"></video>
+                <iframe id="iframe-player" class="w-full h-full hidden" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                
+                <div id="loading-overlay" class="absolute inset-0 bg-black bg-opacity-70 flex-col items-center justify-center hidden">
+                    <div class="spinner"></div>
+                    <p class="mt-4 text-lg font-semibold">Loading Channel...</p>
+                </div>
+            </div>
+
+            <div id="channel-section">
+                <h2 class="text-xl font-bold mt-8 mb-4 text-blue-300 tracking-wider uppercase">Sports Channels</h2>
+                <div id="channel-grid-1" class="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-3 sm:gap-4">
+                    </div>
+
+                <h2 class="text-xl font-bold mt-8 mb-4 text-blue-300 tracking-wider uppercase">Live Cricket</h2>
+                <div id="channel-grid-2" class="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-3 sm:gap-4">
+                    </div>
+            </div>
+
+            <div class="mt-8 bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+                <div class="relative flex overflow-x-hidden">
+                    <p class="marquee-content py-3 text-gray-300 font-semibold tracking-wider">
+                        Welcome to Sportspro TV. Your home for the best sports action. All day, every day. &nbsp;&nbsp;&nbsp;&nbsp; Welcome to Sportspro TV. Your home for the best sports action. All day, every day. &nbsp;&nbsp;&nbsp;&nbsp;
+                    </p>
+                </div>
+            </div>
+        </main>
+
+        <footer class="text-center py-8">
+            <p class="text-gray-500 text-sm">&copy; 2025 Sportspro. All Rights Reserved.</p>
+            <p class="text-gray-600 text-xs mt-1">Disclaimer: This website is for demonstration purposes only.</p>
+        </footer>
+    </div>
+
+    <div class="fixed bottom-6 right-6 z-50 flex flex-col space-y-4">
+        <a href="https://wa.me/1234567890" target="_blank" rel="noopener noreferrer" title="Contact on WhatsApp" class="flex items-center justify-center w-14 h-14 bg-green-500 rounded-full shadow-lg transition-transform duration-300 hover:scale-110 hover:shadow-xl">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 4.315 1.919 6.066l-1.225 4.485 4.635-1.218z"/></svg>
+        </a>
+        <a href="https://t.me/sportsproapp" target="_blank" rel="noopener noreferrer" title="Contact on Telegram" class="flex items-center justify-center w-14 h-14 bg-sky-500 rounded-full shadow-lg transition-transform duration-300 hover:scale-110 hover:shadow-xl">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="currentColor"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.62 11.93c-.58-.19-.59-.54.1-.73l16-6.1c.39-.15.73.09.6.52l-2.72 12.81c-.14.65-.54.81-1.08.5L12 18.15l-1.89 1.8c-.23.23-.42.41-.73.41z"/></svg>
+        </a>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- DOM ELEMENTS ---
+            const videoPlayer = document.getElementById('video-player');
+            const iframePlayer = document.getElementById('iframe-player');
+            const channelSection = document.getElementById('channel-section');
+            const channelGrid1 = document.getElementById('channel-grid-1');
+            const channelGrid2 = document.getElementById('channel-grid-2');
+            const loadingOverlay = document.getElementById('loading-overlay');
+
+            let hls = new Hls();
+            let activeChannelElement = null;
+
+            // --- CHANNEL DATA ---
+            // CHANGED: Added a 'category' property to each channel
+            const channels = [
+                { name: 'Super cricket', icon: 'https://placehold.co/200x200/FF0000/FFFFFF?text=S cricket', src: 'https://allinonereborn.xyz/opplextv-web1/live.php?id=167592', type: 'hls', category: 'sports' },
+                { name: 'Sony ten 2', icon: 'https://placehold.co/200x200/4A90E2/FFFFFF?text=Sony 2', src: 'https://allinonereborn.xyz/opplextv-web1/live.php?id=167571', type: 'hls', category: 'sports' },
+                { name: 'Sony ten 3', icon: 'https://placehold.co/200x200/F5A623/FFFFFF?text=Sony 3', src: 'https://allinonereborn.xyz/opplextv-web1/live.php?id=167572', type: 'hls', category: 'sports' },
+                { name: 'Extreme Sports', icon: 'https://placehold.co/200x200/7ED321/FFFFFF?text=Football', src: 'https://hex-seven.vercel.app/drmplay.html?mpd=https%3A%2F%2Fplaylist.streameast247.com%2Fplaylist%2Fstream_4.m3u8&keyid=null&key=null', type: 'embed', category: 'sports' },
+                { name: 'Star sports T', icon: 'https://placehold.co/200x200/BD10E0/FFFFFF?text=Star tamil', src: 'https://allinonereborn.xyz/airteltv-web/live.php?id=276742', type: 'hls', category: 'sports' },
+                { name: 'Star Sports 1', icon: 'https://placehold.co/200x200/9013FE/FFFFFF?text=Star 1', src: 'https://rips.in/player.php?ch=3', type: 'embed', category: 'sports' },
+                { name: 'Star sports 2', icon: 'https://placehold.co/200x200/055D7C/FFFFFF?text=S sports 2', src: 'https://allinonereborn.xyz/opplextv-web1/live.php?id=382205', type: 'hls', category: 'sports' },
+              { name: 'Sony Liv', icon: 'https://placehold.co/200x200/055D7C/FFFFFF?text=SonyLiv', src: 'http://mini.allinonereborn.online/events/stream_proxy.php?url=https%3A%2F%2Fliveakmt-p-web.slivcdn.com%2Fhls%2Flive%2F2094588%2FDAI04ME-V3%2Fhdntl%3Dexp%3D1759436182~acl%3D%252f%2A~id%3D13974607882115853018865814979194~data%3Dhdntl%2C2094588%2CDAI04ME-V3%2Cnone~hmac%3Df288922d1b67fc6e0e947a4ce50b0bafcca9302adcc84d0257eb2c095be7fb49%2Fmaster_4500.m3u8', type: 'hls', category: 'sports' },
+                { name: 'Willow cricket', icon: 'https://placehold.co/200x200/9013FE/FFFFFF?text=Willow', src: 'https://allinonereborn.xyz/opplextv-web1/live.php?id=167581', type: 'embed', category: 'cricket' },
+              { name: 'Sony Liv', icon: 'https://placehold.co/200x200/9013FE/FFFFFF?text=SonyLiv', src: 'http://mini.allinonereborn.online/events/stream_proxy.php?url=https%3A%2F%2Fliveakmt-p-web.slivcdn.com%2Fhls%2Flive%2F2094588%2FDAI04ME-V3%2Fhdntl%3Dexp%3D1759436182~acl%3D%252f%2A~id%3D13974607882115853018865814979194~data%3Dhdntl%2C2094588%2CDAI04ME-V3%2Cnone~hmac%3Df288922d1b67fc6e0e947a4ce50b0bafcca9302adcc84d0257eb2c095be7fb49%2Fmaster_4500.m3u8', type: 'embed', category: 'cricket' },
+                { name: 'Astro cricket', icon: 'https://placehold.co/200x200/50E3C2/FFFFFF?text=Astro cricket', src: 'https://allinonereborn.xyz/opplextv-web1/live.php?id=167581', type: 'hls', category: 'cricket' },
+            ];
+
+            // --- FUNCTIONS ---
+
+            /**
+             * NEW LOGIC: This function now dynamically populates grids based on channel category.
+             * It will show ALL channels from your list, no matter how many you add.
+             */
+            function populateChannelGrid() {
+                // Clear any existing channels to prevent duplicates if ever run again
+                channelGrid1.innerHTML = '';
+                channelGrid2.innerHTML = '';
+
+                channels.forEach((channel, index) => {
+                    // Create the channel icon element
+                    const channelDiv = document.createElement('div');
+                    channelDiv.className = 'channel-icon flex flex-col items-center p-2 bg-gray-800/50 rounded-lg shadow-md cursor-pointer transition-all duration-300 hover:scale-105 hover:bg-gray-700/70 border-2 border-transparent';
+                    channelDiv.dataset.src = channel.src;
+                    channelDiv.dataset.type = channel.type;
+                    channelDiv.dataset.index = index;
+
+                    const imgContainer = document.createElement('div');
+                    imgContainer.className = 'aspect-square w-full';
+
+                    const img = document.createElement('img');
+                    img.src = channel.icon;
+                    img.alt = channel.name;
+                    img.className = 'w-full h-full object-cover rounded-md';
+                    
+                    imgContainer.appendChild(img);
+
+                    const title = document.createElement('span');
+                    title.className = 'block text-sm font-semibold mt-2 text-center text-gray-200 truncate w-full';
+                    title.textContent = channel.name;
+
+                    channelDiv.appendChild(imgContainer);
+                    channelDiv.appendChild(title);
+
+                    // Decide which grid to add the channel to based on its category
+                    if (channel.category === 'sports') {
+                        channelGrid1.appendChild(channelDiv);
+                    } else if (channel.category === 'cricket') {
+                        channelGrid2.appendChild(channelDiv);
+                    }
+                });
+            }
+
+
+            /**
+             * Loads a video and shows a loading indicator.
+             */
+            function loadVideo(src, type) {
+                loadingOverlay.style.display = 'flex'; // Show spinner
+                videoPlayer.poster = ''; // Clear poster
+                
+                // Stop any previous playback
+                videoPlayer.pause();
+                hls.stopLoad();
+                iframePlayer.src = 'about:blank';
+
+                if (type === 'hls') {
+                    videoPlayer.classList.remove('hidden');
+                    iframePlayer.classList.add('hidden');
+
+                    if (Hls.isSupported()) {
+                        hls.loadSource(src);
+                        hls.attachMedia(videoPlayer);
+                        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                            videoPlayer.play();
+                            loadingOverlay.style.display = 'none'; // Hide spinner
+                        });
+                    } else if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) {
+                        videoPlayer.src = src;
+                        videoPlayer.addEventListener('loadedmetadata', () => {
+                            videoPlayer.play();
+                            loadingOverlay.style.display = 'none'; // Hide spinner
+                        });
+                    }
+                } else if (type === 'embed') {
+                    videoPlayer.classList.add('hidden');
+                    iframePlayer.classList.remove('hidden');
+                    iframePlayer.src = src;
+                    // Hide spinner after iframe loads
+                    iframePlayer.onload = () => {
+                        loadingOverlay.style.display = 'none';
+                    };
+                }
+            }
+            
+            function setActiveChannel(element) {
+                if (activeChannelElement) {
+                    activeChannelElement.classList.remove('active');
+                }
+                element.classList.add('active');
+                activeChannelElement = element;
+            }
+
+            // --- EVENT LISTENERS ---
+            channelSection.addEventListener('click', (event) => {
+                const clickedChannel = event.target.closest('.channel-icon');
+                if (clickedChannel) {
+                    const src = clickedChannel.dataset.src;
+                    const type = clickedChannel.dataset.type;
+                    loadVideo(src, type);
+                    setActiveChannel(clickedChannel);
+                }
+            });
+
+            // --- INITIALIZATION ---
+            populateChannelGrid();
+
+        });
+    </script>
+</body>
+</html>
