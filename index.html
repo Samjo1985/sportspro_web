@@ -1,3 +1,4 @@
+I can help you with that. Here is your updated website code with designated ad spaces marked by comments. You'll just need 
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sportspro - Live TV</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏆</text></svg>">
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -35,7 +36,7 @@
             0% { transform: translateX(0); }
             100% { transform: translateX(-100%); }
         }
-        
+
         /* Style for the active channel icon */
         .channel-icon.active {
             transform: scale(1.05);
@@ -58,6 +59,7 @@
             to { transform: rotate(360deg); }
         }
     </style>
+
     <script async="async" data-cfasync="false" src="//pl27779719.revenuecpmgate.com/89bf79c9a7ab15688aed81611ffa7769/invoke.js"></script>
 <div id="container-89bf79c9a7ab15688aed81611ffa7769"></div>
 </head>
@@ -75,14 +77,26 @@
             </h1>
         </header>
 
+        <div class="my-6">
+            <div id="ad-banner-1" class="w-full text-center min-h-[90px] bg-gray-800 rounded-lg p-2 flex items-center justify-center text-gray-400">
+                Place your Banner Ad Code Here (e.g., 728x90)
+            </div>
+        </div>
+
         <main>
             <div id="player-container" class="relative w-full aspect-video bg-black rounded-xl shadow-2xl overflow-hidden border-2 border-gray-700 flex items-center justify-center">
                 <video id="video-player" class="w-full h-full" controls poster="https://placehold.co/1280x720/111827/FFFFFF?text=Select+a+Channel"></video>
                 <iframe id="iframe-player" class="w-full h-full hidden" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                
+
                 <div id="loading-overlay" class="absolute inset-0 bg-black bg-opacity-70 flex-col items-center justify-center hidden">
                     <div class="spinner"></div>
                     <p class="mt-4 text-lg font-semibold">Loading Channel...</p>
+                </div>
+            </div>
+
+            <div class="mt-8">
+                <div id="ad-native-1" class="w-full p-4 bg-gray-800 rounded-lg text-center text-gray-400">
+                    Place your Native Banner Ad Code Here
                 </div>
             </div>
 
@@ -178,7 +192,7 @@
                     img.src = channel.icon;
                     img.alt = channel.name;
                     img.className = 'w-full h-full object-cover rounded-md';
-                    
+
                     imgContainer.appendChild(img);
 
                     const title = document.createElement('span');
@@ -204,7 +218,7 @@
             function loadVideo(src, type) {
                 loadingOverlay.style.display = 'flex'; // Show spinner
                 videoPlayer.poster = ''; // Clear poster
-                
+
                 // Stop any previous playback
                 videoPlayer.pause();
                 hls.stopLoad();
@@ -238,7 +252,7 @@
                     };
                 }
             }
-            
+
             function setActiveChannel(element) {
                 if (activeChannelElement) {
                     activeChannelElement.classList.remove('active');
@@ -263,8 +277,5 @@
 
         });
     </script>
-</body>
+    </body>
 </html>
-
-
-
