@@ -7,7 +7,6 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏆</text></svg>">
 
     <script src="https://cdn.tailwindcss.com"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,7 +17,6 @@
         /* Custom styles for a clean, modern look and feel */
         body {
             font-family: 'Inter', sans-serif;
-            /* Updated background with a subtle gradient */
             background-color: #111827; /* bg-gray-900 */
             background-image: radial-gradient(circle at top, #1f2937, #111827);
         }
@@ -78,15 +76,15 @@
         <div class="my-6">
             <div id="ad-banner-1" class="w-full text-center min-h-[90px] bg-gray-800 rounded-lg p-2 flex items-center justify-center text-gray-400">
                <script type="text/javascript">
-	atOptions = {
-		'key' : 'a6f017425dd8529d0dc16d15a5a2ee17',
-		'format' : 'iframe',
-		'height' : 60,
-		'width' : 468,
-		'params' : {}
-	};
-</script>
-<script type="text/javascript" src="//www.highperformanceformat.com/a6f017425dd8529d0dc16d15a5a2ee17/invoke.js"></script>
+                atOptions = {
+                    'key' : 'a6f017425dd8529d0dc16d15a5a2ee17',
+                    'format' : 'iframe',
+                    'height' : 60,
+                    'width' : 468,
+                    'params' : {}
+                };
+            </script>
+            <script type="text/javascript" src="//www.highperformanceformat.com/a6f017425dd8529d0dc16d15a5a2ee17/invoke.js"></script>
             </div>
         </div>
 
@@ -104,7 +102,7 @@
             <div class="mt-8">
                 <div id="ad-native-1" class="w-full p-4 bg-gray-800 rounded-lg text-center text-gray-400">
                     <script async="async" data-cfasync="false" src="//pl27779719.revenuecpmgate.com/89bf79c9a7ab15688aed81611ffa7769/invoke.js"></script>
-<div id="container-89bf79c9a7ab15688aed81611ffa7769"></div>
+                    <div id="container-89bf79c9a7ab15688aed81611ffa7769"></div>
                 </div>
             </div>
 
@@ -141,7 +139,14 @@
             <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="currentColor"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.62 11.93c-.58-.19-.59-.54.1-.73l16-6.1c.39-.15.73.09.6.52l-2.72 12.81c-.14.65-.54.81-1.08.5L12 18.15l-1.89 1.8c-.23.23-.42.41-.73.41z"/></svg>
         </a>
     </div>
-
+    <div id="image-popup-overlay" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 hidden p-4">
+        <div class="relative bg-gray-800 p-3 rounded-lg shadow-xl max-w-lg w-full">
+            <img id="popup-image" src="" alt="Promotional Image" class="w-full h-auto rounded-md">
+            <button id="close-popup-btn" class="absolute top-0 right-0 mt-4 mr-4 bg-gray-900/70 text-white rounded-full w-8 h-8 flex items-center justify-center text-lg font-bold transition-transform hover:scale-110">
+                &times;
+            </button>
+        </div>
+    </div>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // --- DOM ELEMENTS ---
@@ -156,37 +161,28 @@
             let activeChannelElement = null;
 
             // --- CHANNEL DATA ---
-            // CHANGED: Added a 'category' property to each channel
             const channels = [
                 { name: 'Sony Ten 1', icon: 'https://placehold.co/200x200/FF0000/FFFFFF?text=Sony Ten 1', src: 'https://allinonereborn.xyz/opplextv-web1/live.php?id=167570', type: 'hls', category: 'sports' },
                 { name: 'Sony ten 2', icon: 'https://placehold.co/200x200/4A90E2/FFFFFF?text=Sony 2', src: 'https://allinonereborn.xyz/opplextv-web1/live.php?id=167571', type: 'hls', category: 'sports' },
                 { name: 'Sony ten 3', icon: 'https://placehold.co/200x200/F5A623/FFFFFF?text=Sony 3', src: 'https://allinonereborn.xyz/opplextv-web1/live.php?id=167572', type: 'hls', category: 'sports' },
                 { name: 'Willow Cricket', icon: 'https://placehold.co/200x200/7ED321/FFFFFF?text=Willow', src: 'https://rips.in/player.php?ch=6', type: 'embed', category: 'cricket' },
-
                 { name: 'Star sports T', icon: 'https://placehold.co/200x200/BD10E0/FFFFFF?text=Star tamil', src: 'https://allinonereborn.xyz/airteltv-web/live.php?id=276742', type: 'hls', category: 'sports' },
                 { name: 'Star Sports 1', icon: 'https://placehold.co/200x200/9013FE/FFFFFF?text=Star 1', src: 'https://rips.in/player.php?ch=3', type: 'embed', category: 'sports' },
                 { name: 'Star sports 2', icon: 'https://placehold.co/200x200/055D7C/FFFFFF?text=S sports 2', src: 'https://allinonereborn.xyz/opplextv-web1/live.php?id=382205', type: 'hls', category: 'sports' },
-
-{ name: 'Star sports 2 h', icon: 'https://placehold.co/200x200/055D7C/FFFFFF?text=S sports 2 h', src: 'https://allinonereborn.xyz/opplextv-web1/live.php?id=167574', type: 'hls', category: 'sports' },
-              { name: 'Sony Liv', icon: 'https://placehold.co/200x200/055D7C/FFFFFF?text=SonyLiv', src: 'http://mini.allinonereborn.online/events/stream_proxy.php?url=https%3A%2F%2Fliveakmt-p-web.slivcdn.com%2Fhls%2Flive%2F2094588%2FDAI04ME-V3%2Fhdntl%3Dexp%3D1759436182~acl%3D%252f%2A~id%3D13974607882115853018865814979194~data%3Dhdntl%2C2094588%2CDAI04ME-V3%2Cnone~hmac%3Df288922d1b67fc6e0e947a4ce50b0bafcca9302adcc84d0257eb2c095be7fb49%2Fmaster_4500.m3u8', type: 'hls', category: 'sports' },
+                { name: 'Star sports 2 h', icon: 'https://placehold.co/200x200/055D7C/FFFFFF?text=S sports 2 h', src: 'https://allinonereborn.xyz/opplextv-web1/live.php?id=167574', type: 'hls', category: 'sports' },
+                { name: 'Sony Liv', icon: 'https://placehold.co/200x200/055D7C/FFFFFF?text=SonyLiv', src: 'http://mini.allinonereborn.online/events/stream_proxy.php?url=https%3A%2F%2Fliveakmt-p-web.slivcdn.com%2Fhls%2Flive%2F2094588%2FDAI04ME-V3%2Fhdntl%3Dexp%3D1759436182~acl%3D%252f%2A~id%3D13974607882115853018865814979194~data%3Dhdntl%2C2094588%2CDAI04ME-V3%2Cnone~hmac%3Df288922d1b67fc6e0e947a4ce50b0bafcca9302adcc84d0257eb2c095be7fb49%2Fmaster_4500.m3u8', type: 'hls', category: 'sports' },
                 { name: 'Willow cricket', icon: 'https://placehold.co/200x200/9013FE/FFFFFF?text=Willow', src: 'https://hex-seven.vercel.app/drmplay.html?mpd=https%3A%2F%2Fottb.live.cf.ww.aiv-cdn.net%2Fiad-nitro%2Flive%2Fclients%2Fdash%2Fenc%2Ff60kqesunw%2Fout%2Fv1%2Fa435ed7a00f947deb4369b46d8f2fb70%2Fcenc.mpd&keyid=1779c27b9d077a3ba0c9cc1bb9a94b9f&key=cc5cf3b7928fb9e0a1ee6a8b566f0a8e', type: 'embed', category: 'cricket' },
-              { name: 'Sony Liv', icon: 'https://placehold.co/200x200/9013FE/FFFFFF?text=SonyLiv', src: 'http://mini.allinonereborn.online/events/stream_proxy.php?url=https%3A%2F%2Fliveakmt-p-web.slivcdn.com%2Fhls%2Flive%2F2094588%2FDAI04ME-V3%2Fhdntl%3Dexp%3D1759436182~acl%3D%252f%2A~id%3D13974607882115853018865814979194~data%3Dhdntl%2C2094588%2CDAI04ME-V3%2Cnone~hmac%3Df288922d1b67fc6e0e947a4ce50b0bafcca9302adcc84d0257eb2c095be7fb49%2Fmaster_4500.m3u8', type: 'embed', category: 'cricket' },
+                { name: 'Sony Liv', icon: 'https://placehold.co/200x200/9013FE/FFFFFF?text=SonyLiv', src: 'http://mini.allinonereborn.online/events/stream_proxy.php?url=https%3A%2F%2Fliveakmt-p-web.slivcdn.com%2Fhls%2Flive%2F2094588%2FDAI04ME-V3%2Fhdntl%3Dexp%3D1759436182~acl%3D%252f%2A~id%3D13974607882115853018865814979194~data%3Dhdntl%2C2094588%2CDAI04ME-V3%2Cnone~hmac%3Df288922d1b67fc6e0e947a4ce50b0bafcca9302adcc84d0257eb2c095be7fb49%2Fmaster_4500.m3u8', type: 'embed', category: 'cricket' },
                 { name: 'Astro cricket', icon: 'https://placehold.co/200x200/50E3C2/FFFFFF?text=Astro cricket', src: 'https://allinonereborn.xyz/opplextv-web1/live.php?id=167581', type: 'hls', category: 'cricket' },
             ];
 
             // --- FUNCTIONS ---
 
-            /**
-             * NEW LOGIC: This function now dynamically populates grids based on channel category.
-             * It will show ALL channels from your list, no matter how many you add.
-             */
             function populateChannelGrid() {
-                // Clear any existing channels to prevent duplicates if ever run again
                 channelGrid1.innerHTML = '';
                 channelGrid2.innerHTML = '';
 
                 channels.forEach((channel, index) => {
-                    // Create the channel icon element
                     const channelDiv = document.createElement('div');
                     channelDiv.className = 'channel-icon flex flex-col items-center p-2 bg-gray-800/50 rounded-lg shadow-md cursor-pointer transition-all duration-300 hover:scale-105 hover:bg-gray-700/70 border-2 border-transparent';
                     channelDiv.dataset.src = channel.src;
@@ -210,7 +206,6 @@
                     channelDiv.appendChild(imgContainer);
                     channelDiv.appendChild(title);
 
-                    // Decide which grid to add the channel to based on its category
                     if (channel.category === 'sports') {
                         channelGrid1.appendChild(channelDiv);
                     } else if (channel.category === 'cricket') {
@@ -219,15 +214,9 @@
                 });
             }
 
-
-            /**
-             * Loads a video and shows a loading indicator.
-             */
             function loadVideo(src, type) {
-                loadingOverlay.style.display = 'flex'; // Show spinner
-                videoPlayer.poster = ''; // Clear poster
-
-                // Stop any previous playback
+                loadingOverlay.style.display = 'flex';
+                videoPlayer.poster = '';
                 videoPlayer.pause();
                 hls.stopLoad();
                 iframePlayer.src = 'about:blank';
@@ -241,20 +230,19 @@
                         hls.attachMedia(videoPlayer);
                         hls.on(Hls.Events.MANIFEST_PARSED, () => {
                             videoPlayer.play();
-                            loadingOverlay.style.display = 'none'; // Hide spinner
+                            loadingOverlay.style.display = 'none';
                         });
                     } else if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) {
                         videoPlayer.src = src;
                         videoPlayer.addEventListener('loadedmetadata', () => {
                             videoPlayer.play();
-                            loadingOverlay.style.display = 'none'; // Hide spinner
+                            loadingOverlay.style.display = 'none';
                         });
                     }
                 } else if (type === 'embed') {
                     videoPlayer.classList.add('hidden');
                     iframePlayer.classList.remove('hidden');
                     iframePlayer.src = src;
-                    // Hide spinner after iframe loads
                     iframePlayer.onload = () => {
                         loadingOverlay.style.display = 'none';
                     };
@@ -282,6 +270,42 @@
 
             // --- INITIALIZATION ---
             populateChannelGrid();
+
+            // =============== POPUP IMAGE LOGIC START ===============
+            
+            // --- Step 1: Set the URL for your popup image here ---
+            const popupImageUrl = 'https://in.eventfaqs.com/wp-content/uploads/sites/2/2025/09/Untitled-design-2025-09-10T151627.295.png';
+
+            // --- Step 2: Get the popup elements from the HTML ---
+            const popupOverlay = document.getElementById('image-popup-overlay');
+            const popupImage = document.getElementById('popup-image');
+            const closePopupButton = document.getElementById('close-popup-btn');
+
+            function showPopup() {
+                if (popupImageUrl) {
+                    popupImage.src = popupImageUrl; // Set the image source
+                    popupOverlay.classList.remove('hidden'); // Show the popup
+                }
+            }
+
+            function hidePopup() {
+                popupOverlay.classList.add('hidden'); // Hide the popup
+            }
+
+            // --- Step 3: Add event listeners to close the popup ---
+            closePopupButton.addEventListener('click', hidePopup); // Close on button click
+            
+            // Also close if the user clicks on the dark background area
+            popupOverlay.addEventListener('click', (event) => {
+                if (event.target === popupOverlay) {
+                    hidePopup();
+                }
+            });
+            
+            // --- Step 4: Show the popup when the page loads ---
+            showPopup();
+
+            // =============== POPUP IMAGE LOGIC END ===============
 
         });
     </script>
