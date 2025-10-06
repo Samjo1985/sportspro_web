@@ -56,7 +56,7 @@
             to { transform: rotate(360deg); }
         }
     </style>
-    
+
 <script type='text/javascript' src='//pl27780061.revenuecpmgate.com/46/26/dd/4626dd9839d48431daa9701f14af0d96.js'></script>
 </head>
 <body class="text-white flex items-center justify-center min-h-screen p-4">
@@ -119,14 +119,14 @@
             <div class="mt-8 bg-gray-800 rounded-lg shadow-lg overflow-hidden">
                 <div class="relative flex overflow-x-hidden">
                     <p class="marquee-content py-3 text-gray-300 font-semibold tracking-wider">
-                        Welcome to Sportspro TV. Your home for the best sports action. All day, every day. &nbsp;&nbsp;&nbsp;&nbsp; Welcome to Sportspro TV. Your home for the best sports action. All day, every day. &nbsp;&nbsp;&nbsp;&nbsp;
+                        Welcome to Sportspro TV. Your home for the best sports action. All day, every day.      Welcome to Sportspro TV. Your home for the best sports action. All day, every day.     
                     </p>
                 </div>
             </div>
         </main>
 
         <footer class="text-center py-8">
-            <p class="text-gray-500 text-sm">&copy; 2025 Sportspro. All Rights Reserved.</p>
+            <p class="text-gray-500 text-sm">© 2025 Sportspro. All Rights Reserved.</p>
             <p class="text-gray-600 text-xs mt-1">Disclaimer: This website does not host, upload, or distribute any videos or channels. All content available on this site belongs to its respective copyright owners. We respect the rights of content creators and provide this material for reference and educational purposes only.</p>
         </footer>
     </div>
@@ -143,174 +143,192 @@
         <div class="relative bg-gray-800 p-3 rounded-lg shadow-xl max-w-lg w-full">
             <img id="popup-image" src="" alt="Promotional Image" class="w-full h-auto rounded-md">
             <button id="close-popup-btn" class="absolute top-0 right-0 mt-4 mr-4 bg-gray-900/70 text-white rounded-full w-8 h-8 flex items-center justify-center text-lg font-bold transition-transform hover:scale-110">
-                &times;
+                ×
             </button>
         </div>
     </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // --- DOM ELEMENTS ---
-            const videoPlayer = document.getElementById('video-player');
-            const iframePlayer = document.getElementById('iframe-player');
-            const channelSection = document.getElementById('channel-section');
-            const channelGrid1 = document.getElementById('channel-grid-1');
-            const channelGrid2 = document.getElementById('channel-grid-2');
-            const loadingOverlay = document.getElementById('loading-overlay');
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // --- DOM ELEMENTS ---
+    const videoPlayer = document.getElementById('video-player');
+    const iframePlayer = document.getElementById('iframe-player');
+    const channelSection = document.getElementById('channel-section');
+    const channelGrid1 = document.getElementById('channel-grid-1');
+    const channelGrid2 = document.getElementById('channel-grid-2');
+    const loadingOverlay = document.getElementById('loading-overlay');
 
-            let hls = new Hls();
-            let activeChannelElement = null;
+    let hls = new Hls();
+    let activeChannelElement = null;
 
-            // --- CHANNEL DATA ---
-            const channels = [
-                { name: 'Sony Ten 1', icon: 'https://placehold.co/200x200/FF0000/FFFFFF?text=Sony Ten 1', src: 'https://allinonereborn.xyz/opplextv-web1/live.php?id=167570', type: 'hls', category: 'sports' },
-                { name: 'Sony ten 2', icon: 'https://placehold.co/200x200/4A90E2/FFFFFF?text=Sony 2', src: 'https://allinonereborn.xyz/opplextv-web1/live.php?id=167571', type: 'hls', category: 'sports' },
-                { name: 'Sony ten 3', icon: 'https://placehold.co/200x200/F5A623/FFFFFF?text=Sony 3', src: 'https://allinonereborn.xyz/opplextv-web1/live.php?id=167572', type: 'hls', category: 'sports' },
-                { name: 'Willow Cricket', icon: 'https://placehold.co/200x200/7ED321/FFFFFF?text=Willow', src: 'https://rips.in/player.php?ch=6', type: 'embed', category: 'cricket' },
+    // --- CHANNEL DATA ---
+    // --- FIX: Removed the trailing comma at the end of this list that was causing a script error ---
+    const channels = [
+        // === Sony Network ===
+        { name: 'Sony Ten 1', icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7zcC3dk8mCRySagNTzg3WLd1Adugyc1serpGlbc6CoQ&s=10', src: 'https://allinonereborn.xyz/opplextv-web1/live.php?id=167570', type: 'hls', category: 'sports' },
+        { name: 'Sony Ten 2', icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjOr34--G7AMaVv_DMcEmuKkVFY6gX-obJhRuiW1BRDQ&s=10', src: 'https://allinonereborn.xyz/opplextv-web1/live.php?id=167571', type: 'hls', category: 'sports' },
+        { name: 'Sony Ten 3', icon: 'https://static.wikia.nocookie.net/logopedia/images/f/ff/Sony_Sports_Ten_3.png', src: 'https://allinonereborn.xyz/opplextv-web1/live.php?id=167572', type: 'hls', category: 'sports' },
+        { name: 'Sony Liv', icon: 'https://upload.wikimedia.org/wikipedia/en/thumb/e/e4/SonyLIV_logo.svg/1200px-SonyLIV_logo.svg.png', src: 'http://mini.allinonereborn.online/events/stream_proxy.php?url=https%3A%2F%2Fliveakmt-p-web.slivcdn.com%2Fhls%2Flive%2F2094588%2FDAI04ME-V3%2Fhdntl%3Dexp%3D1759436182~acl%3D%252f%2A~id%3D13974607882115853018865814979194~data%3Dhdntl%2C2094588%2CDAI04ME-V3%2Cnone~hmac%3Df288922d1b67fc6e0e947a4ce50b0bafcca9302adcc84d0257eb2c095be7fb49%2Fmaster_4500.m3u8', type: 'hls', category: 'sports' },
+        
+        // === Star Network ===
+        { name: 'Star Sports 1', icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGiiXn3ielMWWsQa326Ki8DtLa687rH3DbG8zK0fqsdA&s=10', src: 'https://rips.in/player.php?ch=3', type: 'embed', category: 'sports' },
+        { name: 'Star Sports 2', icon: 'https://static.wikia.nocookie.net/logopedia/images/3/30/STAR_Sports_2_logo.png', src: 'https://allinonereborn.xyz/opplextv-web1/live.php?id=382205', type: 'hls', category: 'sports' },
+        { name: 'Star Sports Tamil', icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5gg6U_lTH0p6SiLrEBs4ib-BH3Or0Oh8zIWAILnE5Fw&s=10', src: 'https://allinonereborn.xyz/airteltv-web/live.php?id=276742', type: 'hls', category: 'sports' },
 
-{ name: 'World Cup 2025 W', icon: 'https://placehold.co/200x200/7ED321/FFFFFF?text=WorldCup', src: 'https://xiaolin.live/wowhaha.php?m3u8=https%3A%2F%2Flivecdn.rumsport.com%2Fstream%2F47%2Findex.m3u8&parent=axswatch2.com&matchdate=1759743000&token=24f20c1e6b5965bffb084d94cfe02b2d97e4161c.false.1759752000-GAocH2Eg0TNIp%2B1RrwLuvWzNGhD%2B1DSCF7Bwk9anKhs%3D', type: 'embed', category: 'cricket' },
+        // === Cricket Specific ===
+        { name: 'Willow Cricket', icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcFtKCvqTk-dRIE2pfIZC2BcNF3Ho6kFoCuve98peO3_323g1IbpZp2zuA&s=10', src: 'https://rips.in/player.php?ch=6', type: 'embed', category: 'cricket' },
+        { name: 'Astro Cricket', icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJ201ecVQkd0ItU7_BC5AJk4zsHXiwtEIkPYZJPH4dbQ&s=10', src: 'https://allinonereborn.xyz/opplextv-web1/live.php?id=167581', type: 'hls', category: 'cricket' },
+        { name: 'World Cup 2025', icon: 'https://upload.wikimedia.org/wikipedia/en/thumb/d/d3/2025_Women%27s_Cricket_World_Cup_logo.svg/1200px-2025_Women%27s_Cricket_World_Cup_logo.svg.png', src: 'https://xiaolin.live/wowhaha.php?m3u8=https%3A%2F%2Flivecdn.rumsport.com%2Fstream%2F47%2Findex.m3u8&parent=axswatch2.com&matchdate=1759743000&token=24f20c1e6b5965bffb084d94cfe02b2d97e4161c.false.1759752000-GAocH2Eg0TNIp%2B1RrwLuvWzNGhD%2B1DSCF7Bwk9anKhs%3D', type: 'embed', category: 'cricket' },
+        
+        // === Other International Sports - REPLACE '#' WITH YOUR STREAM URL ===
+        { name: 'ESPN', icon: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/ESPN_wordmark.svg/1200px-ESPN_wordmark.svg.png', src: '#', type: 'embed', category: 'sports' },
+        { name: 'Sky Sports', icon: 'https://upload.wikimedia.org/wikipedia/en/thumb/5/53/Sky_Sports_logo_2020.svg/1200px-Sky_Sports_logo_2020.svg.png', src: '#', type: 'embed', category: 'sports' },
+        { name: 'beIN Sports', icon: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/BeIN_Sports_logo.svg/1200px-BeIN_Sports_logo.svg.png', src: '#', type: 'embed', category: 'sports' },
+        { name: 'Fox Sports 1', icon: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Fox_Sports_1_2023.svg/1200px-Fox_Sports_1_2023.svg.png', src: '#', type: 'embed', category: 'sports' },
+        { name: 'PTV Sports', icon: 'https://upload.wikimedia.org/wikipedia/en/thumb/6/6f/PTV_Sports_logo.svg/1200px-PTV_Sports_logo.svg.png', src: '#', type: 'hls', category: 'cricket' },
+        { name: 'DD Sports', icon: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/DD_Sports_logo.svg/1200px-DD_Sports_logo.svg.png', src: '#', type: 'hls', category: 'cricket' }
+    ];
 
-                { name: 'Star sports T', icon: 'https://placehold.co/200x200/BD10E0/FFFFFF?text=Star tamil', src: 'https://allinonereborn.xyz/airteltv-web/live.php?id=276742', type: 'hls', category: 'sports' },
-                { name: 'Star Sports 1', icon: 'https://placehold.co/200x200/9013FE/FFFFFF?text=Star 1', src: 'https://rips.in/player.php?ch=3', type: 'embed', category: 'sports' },
-                { name: 'Star sports 2', icon: 'https://placehold.co/200x200/055D7C/FFFFFF?text=S sports 2', src: 'https://allinonereborn.xyz/opplextv-web1/live.php?id=382205', type: 'hls', category: 'sports' },
-                { name: 'Star sports 2 h', icon: 'https://placehold.co/200x200/055D7C/FFFFFF?text=S sports 2 h', src: 'https://allinonereborn.xyz/opplextv-web1/live.php?id=167574', type: 'hls', category: 'sports' },
-                { name: 'Sony Liv', icon: 'https://placehold.co/200x200/055D7C/FFFFFF?text=SonyLiv', src: 'http://mini.allinonereborn.online/events/stream_proxy.php?url=https%3A%2F%2Fliveakmt-p-web.slivcdn.com%2Fhls%2Flive%2F2094588%2FDAI04ME-V3%2Fhdntl%3Dexp%3D1759436182~acl%3D%252f%2A~id%3D13974607882115853018865814979194~data%3Dhdntl%2C2094588%2CDAI04ME-V3%2Cnone~hmac%3Df288922d1b67fc6e0e947a4ce50b0bafcca9302adcc84d0257eb2c095be7fb49%2Fmaster_4500.m3u8', type: 'hls', category: 'sports' },
-                { name: 'Willow cricket', icon: 'https://placehold.co/200x200/9013FE/FFFFFF?text=Willow', src: 'https://hex-seven.vercel.app/drmplay.html?mpd=https%3A%2F%2Fottb.live.cf.ww.aiv-cdn.net%2Fiad-nitro%2Flive%2Fclients%2Fdash%2Fenc%2Ff60kqesunw%2Fout%2Fv1%2Fa435ed7a00f947deb4369b46d8f2fb70%2Fcenc.mpd&keyid=1779c27b9d077a3ba0c9cc1bb9a94b9f&key=cc5cf3b7928fb9e0a1ee6a8b566f0a8e', type: 'embed', category: 'cricket' },
-                { name: 'Sony Liv', icon: 'https://placehold.co/200x200/9013FE/FFFFFF?text=SonyLiv', src: 'http://mini.allinonereborn.online/events/stream_proxy.php?url=https%3A%2F%2Fliveakmt-p-web.slivcdn.com%2Fhls%2Flive%2F2094588%2FDAI04ME-V3%2Fhdntl%3Dexp%3D1759436182~acl%3D%252f%2A~id%3D13974607882115853018865814979194~data%3Dhdntl%2C2094588%2CDAI04ME-V3%2Cnone~hmac%3Df288922d1b67fc6e0e947a4ce50b0bafcca9302adcc84d0257eb2c095be7fb49%2Fmaster_4500.m3u8', type: 'embed', category: 'cricket' },
-                { name: 'Astro cricket', icon: 'https://placehold.co/200x200/50E3C2/FFFFFF?text=Astro cricket', src: 'https://allinonereborn.xyz/opplextv-web1/live.php?id=167581', type: 'hls', category: 'cricket' },
-            ];
+    // --- FUNCTIONS ---
 
-            // --- FUNCTIONS ---
+    function populateChannelGrid() {
+        channelGrid1.innerHTML = '';
+        channelGrid2.innerHTML = '';
 
-            function populateChannelGrid() {
-                channelGrid1.innerHTML = '';
-                channelGrid2.innerHTML = '';
+        channels.forEach((channel) => {
+            const channelDiv = document.createElement('div');
+            channelDiv.className = 'channel-icon flex flex-col items-center p-2 bg-gray-800/50 rounded-lg shadow-md cursor-pointer transition-all duration-300 hover:scale-105 hover:bg-gray-700/70 border-2 border-transparent';
+            channelDiv.dataset.src = channel.src;
+            channelDiv.dataset.type = channel.type;
 
-                channels.forEach((channel, index) => {
-                    const channelDiv = document.createElement('div');
-                    channelDiv.className = 'channel-icon flex flex-col items-center p-2 bg-gray-800/50 rounded-lg shadow-md cursor-pointer transition-all duration-300 hover:scale-105 hover:bg-gray-700/70 border-2 border-transparent';
-                    channelDiv.dataset.src = channel.src;
-                    channelDiv.dataset.type = channel.type;
-                    channelDiv.dataset.index = index;
+            const imgContainer = document.createElement('div');
+            imgContainer.className = 'aspect-square w-full';
 
-                    const imgContainer = document.createElement('div');
-                    imgContainer.className = 'aspect-square w-full';
+            const img = document.createElement('img');
+            img.src = channel.icon;
+            img.alt = channel.name;
+            // Using object-contain is better for logos so they don't get cut off
+            img.className = 'w-full h-full object-contain rounded-md p-1'; 
 
-                    const img = document.createElement('img');
-                    img.src = channel.icon;
-                    img.alt = channel.name;
-                    img.className = 'w-full h-full object-cover rounded-md';
+            imgContainer.appendChild(img);
 
-                    imgContainer.appendChild(img);
+            const title = document.createElement('span');
+            title.className = 'block text-sm font-semibold mt-2 text-center text-gray-200 truncate w-full';
+            title.textContent = channel.name;
 
-                    const title = document.createElement('span');
-                    title.className = 'block text-sm font-semibold mt-2 text-center text-gray-200 truncate w-full';
-                    title.textContent = channel.name;
+            channelDiv.appendChild(imgContainer);
+            channelDiv.appendChild(title);
 
-                    channelDiv.appendChild(imgContainer);
-                    channelDiv.appendChild(title);
+            if (channel.category === 'sports') {
+                channelGrid1.appendChild(channelDiv);
+            } else if (channel.category === 'cricket') {
+                channelGrid2.appendChild(channelDiv);
+            }
+        });
+    }
 
-                    if (channel.category === 'sports') {
-                        channelGrid1.appendChild(channelDiv);
-                    } else if (channel.category === 'cricket') {
-                        channelGrid2.appendChild(channelDiv);
-                    }
+    function loadVideo(src, type) {
+        // Alert user if the channel source is a placeholder
+        if (src === '#') {
+            alert('Stream source for this channel is not available yet. Please check back later.');
+            return;
+        }
+
+        loadingOverlay.style.display = 'flex';
+        videoPlayer.poster = '';
+        videoPlayer.pause();
+        hls.destroy(); // Properly destroy previous HLS instance
+        iframePlayer.src = 'about:blank';
+
+        if (type === 'hls') {
+            videoPlayer.classList.remove('hidden');
+            iframePlayer.classList.add('hidden');
+
+            if (Hls.isSupported()) {
+                hls = new Hls();
+                hls.loadSource(src);
+                hls.attachMedia(videoPlayer);
+                hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                    videoPlayer.play().catch(e => console.error("Autoplay failed:", e));
+                    loadingOverlay.style.display = 'none';
+                });
+                hls.on(Hls.Events.ERROR, function(event, data) {
+                   if (data.fatal) {
+                     console.error('HLS fatal error:', data);
+                     loadingOverlay.style.display = 'none';
+                   }
+                });
+            } else if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) {
+                videoPlayer.src = src;
+                videoPlayer.addEventListener('loadedmetadata', () => {
+                    videoPlayer.play().catch(e => console.error("Autoplay failed:", e));
+                    loadingOverlay.style.display = 'none';
                 });
             }
+        } else if (type === 'embed') {
+            videoPlayer.classList.add('hidden');
+            iframePlayer.classList.remove('hidden');
+            iframePlayer.src = src;
+            iframePlayer.onload = () => {
+                loadingOverlay.style.display = 'none';
+            };
+        }
+    }
 
-            function loadVideo(src, type) {
-                loadingOverlay.style.display = 'flex';
-                videoPlayer.poster = '';
-                videoPlayer.pause();
-                hls.stopLoad();
-                iframePlayer.src = 'about:blank';
+    function setActiveChannel(element) {
+        if (activeChannelElement) {
+            activeChannelElement.classList.remove('active');
+        }
+        element.classList.add('active');
+        activeChannelElement = element;
+    }
 
-                if (type === 'hls') {
-                    videoPlayer.classList.remove('hidden');
-                    iframePlayer.classList.add('hidden');
+    // --- EVENT LISTENERS ---
+    channelSection.addEventListener('click', (event) => {
+        const clickedChannel = event.target.closest('.channel-icon');
+        if (clickedChannel) {
+            const src = clickedChannel.dataset.src;
+            const type = clickedChannel.dataset.type;
+            loadVideo(src, type);
+            setActiveChannel(clickedChannel);
+        }
+    });
 
-                    if (Hls.isSupported()) {
-                        hls.loadSource(src);
-                        hls.attachMedia(videoPlayer);
-                        hls.on(Hls.Events.MANIFEST_PARSED, () => {
-                            videoPlayer.play();
-                            loadingOverlay.style.display = 'none';
-                        });
-                    } else if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) {
-                        videoPlayer.src = src;
-                        videoPlayer.addEventListener('loadedmetadata', () => {
-                            videoPlayer.play();
-                            loadingOverlay.style.display = 'none';
-                        });
-                    }
-                } else if (type === 'embed') {
-                    videoPlayer.classList.add('hidden');
-                    iframePlayer.classList.remove('hidden');
-                    iframePlayer.src = src;
-                    iframePlayer.onload = () => {
-                        loadingOverlay.style.display = 'none';
-                    };
-                }
+    // --- INITIALIZATION ---
+    populateChannelGrid();
+
+    // =============== POPUP IMAGE LOGIC ===============
+    const popupImageUrl = 'https://femalecricket.com/wp-content/uploads/2025/10/head-to-head-India-vs-pakistan-women.jpg';
+    const popupOverlay = document.getElementById('image-popup-overlay');
+    const popupImage = document.getElementById('popup-image');
+    const closePopupButton = document.getElementById('close-popup-btn');
+
+    function showPopup() {
+        if (popupImageUrl && popupOverlay) {
+            popupImage.src = popupImageUrl;
+            popupOverlay.classList.remove('hidden');
+        }
+    }
+
+    function hidePopup() {
+        if (popupOverlay) {
+            popupOverlay.classList.add('hidden');
+        }
+    }
+
+    if (closePopupButton) {
+        closePopupButton.addEventListener('click', hidePopup);
+    }
+    if (popupOverlay) {
+        popupOverlay.addEventListener('click', (event) => {
+            if (event.target === popupOverlay) {
+                hidePopup();
             }
-
-            function setActiveChannel(element) {
-                if (activeChannelElement) {
-                    activeChannelElement.classList.remove('active');
-                }
-                element.classList.add('active');
-                activeChannelElement = element;
-            }
-
-            // --- EVENT LISTENERS ---
-            channelSection.addEventListener('click', (event) => {
-                const clickedChannel = event.target.closest('.channel-icon');
-                if (clickedChannel) {
-                    const src = clickedChannel.dataset.src;
-                    const type = clickedChannel.dataset.type;
-                    loadVideo(src, type);
-                    setActiveChannel(clickedChannel);
-                }
-            });
-
-            // --- INITIALIZATION ---
-            populateChannelGrid();
-
-            // =============== POPUP IMAGE LOGIC START ===============
-            
-            // --- Step 1: Set the URL for your popup image here ---
-            const popupImageUrl = 'https://femalecricket.com/wp-content/uploads/2025/10/head-to-head-India-vs-pakistan-women.jpg';
-
-            // --- Step 2: Get the popup elements from the HTML ---
-            const popupOverlay = document.getElementById('image-popup-overlay');
-            const popupImage = document.getElementById('popup-image');
-            const closePopupButton = document.getElementById('close-popup-btn');
-
-            function showPopup() {
-                if (popupImageUrl) {
-                    popupImage.src = popupImageUrl; // Set the image source
-                    popupOverlay.classList.remove('hidden'); // Show the popup
-                }
-            }
-
-            function hidePopup() {
-                popupOverlay.classList.add('hidden'); // Hide the popup
-            }
-
-            // --- Step 3: Add event listeners to close the popup ---
-            closePopupButton.addEventListener('click', hidePopup); // Close on button click
-            
-            // Also close if the user clicks on the dark background area
-            popupOverlay.addEventListener('click', (event) => {
-                if (event.target === popupOverlay) {
-                    hidePopup();
-                }
-            });
-            
-            // --- Step 4: Show the popup when the page loads ---
-            showPopup();
-
-            // =============== POPUP IMAGE LOGIC END ===============
-
         });
-    </script>
-    </body>
+    }
+
+    showPopup();
+
+});
+</script>
+</body>
 </html>
