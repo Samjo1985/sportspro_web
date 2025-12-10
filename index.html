@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="referrer" content="no-referrer">
-    <title>SportsPro Web | Live Channel</title>
+    <title>SportsPro Web | Live Sports Channel</title>
     
     <!-- Shaka Player CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.1/controls.min.css" crossorigin="anonymous">
@@ -12,35 +12,37 @@
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Disable dev tools -->
+    <script disable-devtool-auto src='https://cdn.jsdelivr.net/npm/disable-devtool'></script>
+    
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         body {
             background-color: #000;
             color: #fff;
-            overflow-x: hidden;
-            position: relative;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
             height: 100vh;
         }
         
         /* Watermark */
         .watermark {
-            position: fixed;
-            top: 15px;
-            left: 15px;
-            width: 120px;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 100px;
             opacity: 0.7;
             pointer-events: none;
             z-index: 100;
         }
         
         /* Player container */
-        .player-container {
+        .player-wrapper {
             position: absolute;
             top: 0;
             left: 0;
@@ -49,46 +51,56 @@
             z-index: 1;
         }
         
-        #video {
-            width: 100%;
-            height: 100%;
-            display: block;
-        }
-        
-        /* Video placeholder for initial state */
+        /* Video placeholder */
         .video-placeholder {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(45deg, #0c2461, #1e3799);
+            background: #000;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            text-align: center;
-            padding: 20px;
             z-index: 2;
+            text-align: center;
         }
         
         .video-placeholder i {
-            font-size: 80px;
+            font-size: 60px;
             color: #00a8ff;
             margin-bottom: 20px;
         }
         
         .video-placeholder h3 {
-            font-size: 32px;
+            font-size: 24px;
             margin-bottom: 10px;
             color: #fff;
         }
         
         .video-placeholder p {
-            font-size: 18px;
+            font-size: 16px;
             color: #ccc;
-            max-width: 600px;
+            max-width: 500px;
+            padding: 0 20px;
             line-height: 1.5;
+        }
+        
+        /* Loading animation */
+        .loader {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(0, 168, 255, 0.2);
+            border-top: 4px solid #00a8ff;
+            border-radius: 50%;
+            margin: 20px auto;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
         
         /* Floating Telegram button */
@@ -100,14 +112,14 @@
         }
         
         .telegram-btn {
-            width: 70px;
-            height: 70px;
+            width: 60px;
+            height: 60px;
             background: linear-gradient(135deg, #0088cc, #34b7f1);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 6px 20px rgba(0, 136, 204, 0.5);
+            box-shadow: 0 4px 15px rgba(0, 136, 204, 0.5);
             cursor: pointer;
             transition: all 0.3s ease;
             animation: pulse 2s infinite;
@@ -116,83 +128,75 @@
         
         .telegram-btn:hover {
             transform: scale(1.1);
-            box-shadow: 0 8px 25px rgba(0, 136, 204, 0.7);
+            box-shadow: 0 6px 20px rgba(0, 136, 204, 0.7);
         }
         
         .telegram-btn i {
-            font-size: 36px;
+            font-size: 28px;
             color: white;
         }
         
         @keyframes pulse {
             0% { box-shadow: 0 0 0 0 rgba(0, 136, 204, 0.7); }
-            70% { box-shadow: 0 0 0 15px rgba(0, 136, 204, 0); }
+            70% { box-shadow: 0 0 0 10px rgba(0, 136, 204, 0); }
             100% { box-shadow: 0 0 0 0 rgba(0, 136, 204, 0); }
         }
         
-        /* Channel info overlay */
+        /* Channel info */
         .channel-info {
             position: fixed;
             bottom: 30px;
-            left: 30px;
+            left: 20px;
             background: rgba(0, 0, 0, 0.7);
-            padding: 15px 20px;
-            border-radius: 10px;
-            border-left: 4px solid #00a8ff;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border-left: 3px solid #00a8ff;
             z-index: 100;
-            max-width: 300px;
+            max-width: 250px;
             backdrop-filter: blur(5px);
         }
         
         .channel-name {
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 4px;
             color: #00a8ff;
         }
         
         .channel-event {
-            font-size: 16px;
+            font-size: 14px;
             color: #fff;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
         
         .channel-status {
-            font-size: 14px;
+            font-size: 12px;
             color: #44bd32;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
         
         /* Ad containers */
         .ad-container {
             position: fixed;
-            z-index: 200;
             width: 100%;
+            z-index: 200;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(10, 10, 10, 0.8);
         }
         
         .ad-top {
             top: 0;
-            left: 0;
-            width: 100%;
-            height: 100px;
-            background: rgba(10, 10, 10, 0.9);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            height: 90px;
             border-bottom: 1px solid #333;
         }
         
         .ad-bottom {
             bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 100px;
-            background: rgba(10, 10, 10, 0.9);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            height: 90px;
             border-top: 1px solid #333;
         }
         
@@ -207,22 +211,6 @@
             border-radius: 3px;
         }
         
-        /* Loading animation */
-        .loader {
-            width: 50px;
-            height: 50px;
-            border: 5px solid rgba(0, 168, 255, 0.2);
-            border-top: 5px solid #00a8ff;
-            border-radius: 50%;
-            margin: 20px auto;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
         /* Hide shaka player time display */
         .shaka-current-time, .shaka-time-container { 
             display: none !important; 
@@ -232,21 +220,55 @@
             display: none !important; 
         }
         
-        /* Responsive design */
+        /* Error state */
+        .error-message {
+            color: #e74c3c;
+            margin-top: 10px;
+        }
+        
+        .retry-btn {
+            margin-top: 15px;
+            padding: 8px 20px;
+            background: #00a8ff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        /* Responsive */
         @media (max-width: 768px) {
             .watermark {
                 width: 80px;
-                top: 10px;
+            }
+            
+            .telegram-btn {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .telegram-btn i {
+                font-size: 22px;
+            }
+            
+            .channel-info {
+                bottom: 90px;
                 left: 10px;
+                max-width: 200px;
+                padding: 10px 12px;
             }
             
-            .video-placeholder h3 {
-                font-size: 24px;
+            .ad-top, .ad-bottom {
+                height: 70px;
             }
-            
-            .video-placeholder p {
-                font-size: 16px;
-                padding: 0 15px;
+        }
+        
+        @media (max-width: 480px) {
+            .watermark {
+                width: 60px;
+                top: 5px;
+                left: 5px;
             }
             
             .telegram-float {
@@ -254,43 +276,8 @@
                 right: 20px;
             }
             
-            .telegram-btn {
-                width: 60px;
+            .ad-top, .ad-bottom {
                 height: 60px;
-            }
-            
-            .telegram-btn i {
-                font-size: 28px;
-            }
-            
-            .channel-info {
-                bottom: 20px;
-                left: 20px;
-                max-width: 250px;
-                padding: 12px 15px;
-            }
-            
-            .channel-name {
-                font-size: 18px;
-            }
-            
-            .channel-event {
-                font-size: 14px;
-            }
-            
-            .ad-top, .ad-bottom {
-                height: 80px;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .channel-info {
-                bottom: 100px;
-                max-width: 200px;
-            }
-            
-            .ad-top, .ad-bottom {
-                height: 70px;
             }
         }
     </style>
@@ -301,22 +288,19 @@
     
     <!-- Top Ad -->
     <div class="ad-container ad-top">
-        <div class="ad-label">Advertisement</div>
-        <!-- Adsterra Banner Ad Code -->
+        <div class="ad-label">Ad</div>
+        <!-- Adsterra Top Banner Ad -->
         <div id="container-ad-top"></div>
     </div>
     
-    <!-- Player Container -->
-    <div class="player-container">
-        <div data-shaka-player-container style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
+    <!-- Player Wrapper -->
+    <div class="player-wrapper">
+        <div data-shaka-player-container style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;">
             <div class="video-placeholder" id="video-placeholder">
-                <i class="fas fa-satellite-dish"></i>
-                <h3>SportsPro Live Stream</h3>
-                <p>High-quality live streaming. The player will load automatically.</p>
+                <i class="fas fa-tv"></i>
+                <h3>SportsPro Live</h3>
+                <p>Loading high-quality live stream...</p>
                 <div class="loader"></div>
-                <p style="margin-top: 20px; font-size: 14px; color: #aaa;">
-                    If the stream doesn't load, please refresh the page
-                </p>
             </div>
             <video autoplay muted data-shaka-player id="video" poster="https://imgur.com/LofbqIP" style="width:100%; height:100%; display: none;"></video>
         </div>
@@ -325,17 +309,17 @@
     <!-- Channel Info -->
     <div class="channel-info">
         <div class="channel-name">SPORTS PRO LIVE</div>
-        <div class="channel-event">Live Sports Streaming 24/7</div>
+        <div class="channel-event">24/7 Live Sports Streaming</div>
         <div class="channel-status">
-            <i class="fas fa-circle" style="font-size: 10px;"></i>
-            <span>LIVE NOW</span>
+            <i class="fas fa-circle" style="font-size: 8px;"></i>
+            <span>LIVE</span>
         </div>
     </div>
     
     <!-- Bottom Ad -->
     <div class="ad-container ad-bottom">
-        <div class="ad-label">Advertisement</div>
-        <!-- Adsterra Banner Ad Code -->
+        <div class="ad-label">Ad</div>
+        <!-- Adsterra Bottom Banner Ad -->
         <div id="container-ad-bottom"></div>
     </div>
     
@@ -351,227 +335,109 @@
     
     <!-- Adsterra Ad Scripts -->
     <script type="text/javascript">
-        // Adsterra Ad Code Placeholders
-        // Replace these with actual Adsterra codes from your account
-        
-        // Top banner ad
-        var atOptions_top = {
-            'key' : 'your_top_banner_key_here',
-            'format' : 'iframe',
-            'height' : 90,
-            'width' : 728,
-            'params' : {}
-        };
-        
-        // Bottom banner ad
-        var atOptions_bottom = {
-            'key' : 'your_bottom_banner_key_here',
-            'format' : 'iframe',
-            'height' : 90,
-            'width' : 728,
-            'params' : {}
-        };
-        
-        // Popunder ad (will be triggered after page load)
-        var atOptions_pop = {
-            'key' : 'your_popunder_key_here',
-            'format' : 'iframe',
-            'height' : 600,
-            'width' : 160,
-            'params' : {}
-        };
-        
-        // Function to load ads
+        // Load Adsterra ads
         function loadAds() {
-            // Load top banner
-            document.getElementById('container-ad-top').innerHTML = 
-                '<div style="background:rgba(26, 26, 46, 0.9); color:#fff; padding:15px; border-radius:5px; text-align:center; width:728px; height:90px; display:flex; align-items:center; justify-content:center;">' +
-                '<div>Adsterra Top Banner Ad (728x90)<br><small>Replace with actual Adsterra code</small></div>' +
-                '</div>';
+            // Top Banner Ad - REPLACE WITH YOUR ACTUAL ADSTERRA CODE
+            var topAdDiv = document.getElementById('container-ad-top');
+            if (topAdDiv) {
+                topAdDiv.innerHTML = `
+                    <div style="width:728px; height:90px; background:#0a0a1a; display:flex; align-items:center; justify-content:center; color:#666; font-size:14px;">
+                        <div>Adsterra Top Banner Ad (728x90)<br><small>Replace with actual Adsterra code</small></div>
+                    </div>
+                `;
+            }
             
-            // Load bottom banner
-            document.getElementById('container-ad-bottom').innerHTML = 
-                '<div style="background:rgba(26, 26, 46, 0.9); color:#fff; padding:15px; border-radius:5px; text-align:center; width:728px; height:90px; display:flex; align-items:center; justify-content:center;">' +
-                '<div>Adsterra Bottom Banner Ad (728x90)<br><small>Replace with actual Adsterra code</small></div>' +
-                '</div>';
+            // Bottom Banner Ad - REPLACE WITH YOUR ACTUAL ADSTERRA CODE
+            var bottomAdDiv = document.getElementById('container-ad-bottom');
+            if (bottomAdDiv) {
+                bottomAdDiv.innerHTML = `
+                    <div style="width:728px; height:90px; background:#0a0a1a; display:flex; align-items:center; justify-content:center; color:#666; font-size:14px;">
+                        <div>Adsterra Bottom Banner Ad (728x90)<br><small>Replace with actual Adsterra code</small></div>
+                    </div>
+                `;
+            }
             
-            // Trigger popunder ad after 10 seconds
+            // Popunder Ad - This would trigger after page loads
             setTimeout(function() {
-                // This is where the actual Adsterra popunder code would go
                 console.log("Popunder ad would trigger here");
-                
-                // For demo, we'll just log it
-                var popunderHtml = '<div style="display:none;">Popunder ad placeholder</div>';
-                var div = document.createElement('div');
-                div.innerHTML = popunderHtml;
-                document.body.appendChild(div);
-            }, 10000);
+                // Your Adsterra popunder code goes here
+                // document.write('<scr' + 'ipt type="text/javascript" src="https://www.highperformanceformat.com/your-code-here"></scr' + 'ipt>');
+            }, 5000);
         }
     </script>
     
-    <!-- Main Player Script - SIMPLIFIED AND WORKING -->
+    <!-- Main Player Script - YOUR ORIGINAL WORKING SCRIPT -->
     <script>
-        // Define the MPD URL and keys (using the decoded values from original code)
-        const mpdUrl = 'https://otn.live.cf.2lvwuvx3qnbwduu6.workers.dev/bom-30201/dash/enc/cenc.mpd';
-        const kid = 'd0f2e5c39e4bb1ab469370c18f29bf9a';
-        const key = 'f37a18905fd6853c51fc3b0c314fffd7';
+        // Your original working MPD script
+        const _0xef7c83=_0x4a22;(function(_0x5d3485,_0x31dcd3){const _0x5999e5=_0x4a22,_0x227067=_0x5d3485();while(!![]){try{const _0x548192=parseInt(_0x5999e5(0xf7))/(-0x1e53+-0x58b+-0x23df*-0x1)+parseInt(_0x5999e5(0x112))/(-0x4f7+0x75e*-0x1+0xc57)*(parseInt(_0x5999e5(0x114))/(0x789+0x1c9d+-0xb*0x349))+parseInt(_0x5999e5(0xf8))/(0xd*-0x1ab+0x81*-0x4b+0x3b7e)*(parseInt(_0x5999e5(0xf4))/(-0x24ac+0x3dd+-0x2fc*-0xb))+parseInt(_0x5999e5(0x103))/(0x12*0x17d+-0x248a*0x1+0x9c6)+-parseInt(_0x5999e5(0x106))/(-0x1*0x1ba7+0x1832+-0x1be*-0x2)+-parseInt(_0x5999e5(0xfa))/(0x1202*0x1+0x239*-0xe+0xd24)*(-parseInt(_0x5999e5(0x10b))/(-0x1fe3*-0x1+-0x11b2+-0xe28))+-parseInt(_0x5999e5(0xf2))/(0x1046+0x402+-0x143e)*(parseInt(_0x5999e5(0x129))/(0x2e*-0x94+-0xe27+0xe3*0x2e));if(_0x548192===_0x31dcd3)break;else _0x227067['push'](_0x227067['shift']());}catch(_0x1bc808){_0x227067['push'](_0x227067['shift']());}}}(_0x515d,-0x1*0xa92db+0x5a0d+0x1af2*0xda));function _0x4a22(_0x47c53f,_0x3225c0){const _0x181872=_0x515d();return _0x4a22=function(_0x1fb44e,_0xa2fd6e){_0x1fb44e=_0x1fb44e-(0xf6b*-0x1+-0x18c6+0x291c);let _0x24614e=_0x181872[_0x1fb44e];return _0x24614e;},_0x4a22(_0x47c53f,_0x3225c0);}function _0x515d(){const _0x43c2af=['1326772qMIKPO','556KJUABb','polyfill','108616vRhMMp','has\x20now\x20be','log','Player\x20err','https://ot','77768a1ad8','70c18f29bf','fuiKd','querySelec','8720958PdXLlM','Overlay','JrgHA','4507741Zmqmxu','[data-shak','then','XndcL','tor','657BfqNsf','4bb1ab4693','The\x20video\x20','error','configure','/dash/enc/','358f3cd2d3','4cAsgEE','IZUKQ','938913TfRwox','0609972395','addEventLi','load','player','stener','n.net/bom-','mEqNm','/cenc.mpd','a-player-c','Player','en\x20loaded!','f37a18905f','/out/v1/bd','3b0c314fff','wf8usag51e','getControl','d6853c51fc','catch','nitro/live','installAll','48805097ohEBBg','getElement','bCUIp','ontainer]','.ww.aiv-cd','d0f2e5c39e','probeSuppo','ById','Loaded','setEnabled','10pYUPPK','DOMContent','54580AJKRzF','video','tb.live.cf'];_0x515d=function(){return _0x43c2af;};return _0x515d();}const mpdUrl=_0xef7c83(0xfe)+_0xef7c83(0xf6)+_0xef7c83(0xec)+_0xef7c83(0x11a)+_0xef7c83(0x127)+_0xef7c83(0x110)+_0xef7c83(0x123)+_0xef7c83(0x121)+_0xef7c83(0x122)+_0xef7c83(0x10c)+_0xef7c83(0x111)+_0xef7c83(0x11c),kid=_0xef7c83(0xed)+_0xef7c83(0x100)+_0xef7c83(0xff)+'9a',key=_0xef7c83(0x125)+_0xef7c83(0x120)+_0xef7c83(0x115)+'d7';let player,ui;
         
-        let player, ui;
-        
-        // Initialize the player
-        async function initApp() {
-            try {
-                // Install shaka polyfills
-                await shaka.polyfill.installAll();
+        // Modified initApp to show/hide placeholder
+        function initApp() {
+            const _0x6f3c0=_0xef7c83,_0x123590={'XndcL':_0x6f3c0(0x10d)+_0x6f3c0(0xfb)+_0x6f3c0(0x11f),'JrgHA':_0x6f3c0(0xf5),'mEqNm':function(_0x5922da,_0x11ffd2){return _0x5922da(_0x11ffd2);}};
+            
+            shaka[_0x6f3c0(0xf9)][_0x6f3c0(0x128)](),shaka[_0x6f3c0(0x11e)][_0x6f3c0(0xee)+'rt']()[_0x6f3c0(0x108)](function() {
+                const _0x5c3479=_0x6f3c0,_0x1c8e5d={'fuiKd':_0x123590[_0x5c3479(0x109)]},_0x3c64db=document[_0x5c3479(0x12a)+_0x5c3479(0xef)](_0x123590[_0x5c3479(0x105)]);
                 
-                // Check if browser supports basic features
-                if (shaka.Player.isBrowserSupported()) {
-                    console.log('Shaka Player is supported in this browser');
+                player=new shaka[(_0x5c3479(0x11e))](_0x3c64db),window[_0x5c3479(0x118)]=player;
+                
+                const _0x2f8cc4={'drm':{'clearKeys':{[kid]:key}}};
+                player[_0x5c3479(0x10f)](_0x2f8cc4),player[_0x5c3479(0x117)](mpdUrl)[_0x5c3479(0x108)](function() {
+                    const _0x56d235=_0x5c3479;
+                    console[_0x56d235(0xfc)](_0x1c8e5d[_0x56d235(0x101)]);
                     
-                    // Get video element and container
-                    const videoElement = document.getElementById('video');
-                    const videoContainer = document.querySelector('[data-shaka-player-container]');
-                    
-                    // Create player
-                    player = new shaka.Player(videoElement);
-                    window.player = player; // Make player accessible globally
-                    
-                    // Configure player with DRM
-                    const playerConfig = {
-                        drm: {
-                            clearKeys: {
-                                [kid]: key
-                            }
-                        },
-                        streaming: {
-                            bufferingGoal: 30,
-                            rebufferingGoal: 10
-                        }
-                    };
-                    
-                    player.configure(playerConfig);
-                    
-                    // Set up error handling
-                    player.addEventListener('error', onPlayerError);
-                    
-                    // Load the stream
-                    try {
-                        await player.load(mpdUrl);
-                        console.log('Video has now been loaded!');
-                        
-                        // Hide placeholder and show video
-                        document.getElementById('video-placeholder').style.display = 'none';
+                    // Hide placeholder and show video when loaded
+                    var placeholder = document.getElementById('video-placeholder');
+                    var videoElement = document.getElementById('video');
+                    if (placeholder && videoElement) {
+                        placeholder.style.display = 'none';
                         videoElement.style.display = 'block';
-                        
-                        // Initialize UI controls
-                        initializeUI(videoContainer, videoElement);
-                        
-                    } catch (e) {
-                        console.error('Error loading video:', e);
-                        showError('Failed to load the stream. The server might be down.');
                     }
-                } else {
-                    console.error('Shaka Player is not supported in this browser');
-                    showError('Your browser does not support this video player.');
-                }
-            } catch (error) {
-                console.error('Error initializing player:', error);
-                showError('Failed to initialize player.');
-            }
+                    
+                })[_0x5c3479(0x126)](onPlayerError);
+                
+                _0x123590[_0x5c3479(0x11b)](initializeUI,_0x3c64db);
+            })[_0x6f3c0(0x126)](onPlayerError);
         }
         
-        function initializeUI(container, videoElement) {
-            // Create UI controls
-            ui = new shaka.ui.Overlay(player, container, videoElement);
-            
-            // Configure UI
-            const controls = ui.getControls();
-            
-            // Hide the time display if needed
-            const timeContainer = container.querySelector('.shaka-time-container');
-            if (timeContainer) {
-                timeContainer.style.display = 'none';
-            }
-            
-            // Hide current time display
-            const currentTime = container.querySelector('.shaka-current-time');
-            if (currentTime) {
-                currentTime.style.display = 'none';
-            }
-        }
-        
-        function onPlayerError(event) {
-            console.error('Player error:', event.detail);
+        // Modified error handler to show error message
+        function onPlayerError(_0x3742f0) {
+            const _0x111a6f=_0xef7c83,_0x1b9df3={'bCUIp':_0x111a6f(0xfd)+'or'};
+            console[_0x111a6f(0x10e)](_0x1b9df3[_0x111a6f(0x12b)],_0x3742f0);
             
             // Show error message
-            const errorCode = event.detail.code;
-            let errorMessage = 'An error occurred while playing the stream.';
-            
-            if (errorCode === 1001 || errorCode === 1002) {
-                errorMessage = 'Network error. Please check your connection.';
-            } else if (errorCode === 4003 || errorCode === 4007) {
-                errorMessage = 'DRM error. The stream might be encrypted.';
-            } else if (errorCode === 4012) {
-                errorMessage = 'Video format not supported.';
-            }
-            
-            showError(errorMessage);
-        }
-        
-        function showError(message) {
-            const placeholder = document.getElementById('video-placeholder');
-            placeholder.innerHTML = `
-                <i class="fas fa-exclamation-triangle" style="color:#e74c3c; font-size: 60px; margin-bottom: 20px;"></i>
-                <h3>Stream Error</h3>
-                <p>${message}</p>
-                <button onclick="retryStream()" style="margin-top: 20px; padding: 10px 25px; background: #00a8ff; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">
-                    <i class="fas fa-redo"></i> Retry Stream
-                </button>
-                <p style="margin-top: 15px; font-size: 14px; color: #aaa;">
-                    If the problem persists, try refreshing the page
-                </p>
-            `;
-            placeholder.style.display = 'flex';
-        }
-        
-        function retryStream() {
-            const placeholder = document.getElementById('video-placeholder');
-            placeholder.innerHTML = `
-                <i class="fas fa-satellite-dish"></i>
-                <h3>SportsPro Live Stream</h3>
-                <p>Reconnecting to stream...</p>
-                <div class="loader"></div>
-            `;
-            
-            // Try to reload the player
-            if (player) {
-                player.unload();
-                setTimeout(() => {
-                    player.load(mpdUrl).then(() => {
-                        placeholder.style.display = 'none';
-                        document.getElementById('video').style.display = 'block';
-                    }).catch(error => {
-                        showError('Still unable to connect. Please try again later.');
-                    });
-                }, 1000);
-            } else {
-                // If player doesn't exist, reload the page
-                location.reload();
+            var placeholder = document.getElementById('video-placeholder');
+            if (placeholder) {
+                placeholder.innerHTML = `
+                    <i class="fas fa-exclamation-triangle" style="color:#e74c3c;"></i>
+                    <h3>Stream Error</h3>
+                    <p>Failed to load the stream. Please try again.</p>
+                    <div class="error-message">Error Code: ${_0x3742f0?.code || 'Unknown'}</div>
+                    <button class="retry-btn" onclick="location.reload()">Retry</button>
+                `;
             }
         }
         
-        // Initialize when DOM is loaded
+        // Initialize UI
+        function initializeUI(_0x278e3d) {
+            const _0x4358ee=_0xef7c83,_0x2d89f9={'IZUKQ':_0x4358ee(0x107)+_0x4358ee(0x11d)+_0x4358ee(0xeb)},_0x5203b3=document[_0x4358ee(0x102)+_0x4358ee(0x10a)](_0x2d89f9[_0x4358ee(0x113)]);
+            ui=new shaka['ui'][(_0x4358ee(0x104))](player,_0x5203b3,_0x278e3d),ui[_0x4358ee(0x124)+'s'](),ui[_0x4358ee(0x124)+'s']()[_0x4358ee(0xf1)](!![]);
+        }
+        
+        // Initialize everything when DOM is loaded
         document.addEventListener('DOMContentLoaded', function() {
             // Load ads first
             loadAds();
             
-            // Initialize player after a short delay
-            setTimeout(initApp, 1000);
+            // Initialize player
+            setTimeout(initApp, 500);
         });
         
-        // Also try to initialize if page is already loaded
+        // If page is already loaded, initialize immediately
         if (document.readyState === 'complete' || document.readyState === 'interactive') {
-            setTimeout(initApp, 1000);
+            setTimeout(function() {
+                loadAds();
+                initApp();
+            }, 500);
         }
     </script>
 </body>
