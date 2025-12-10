@@ -12,9 +12,6 @@
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Disable dev tools script -->
-    <script disable-devtool-auto src='https://cdn.jsdelivr.net/npm/disable-devtool'></script>
-    
     <style>
         * {
             margin: 0;
@@ -56,7 +53,6 @@
             width: 100%;
             height: 100%;
             display: block;
-            object-fit: cover;
         }
         
         /* Video placeholder for initial state */
@@ -410,138 +406,173 @@
                 div.innerHTML = popunderHtml;
                 document.body.appendChild(div);
             }, 10000);
-            
-            // In actual implementation, you would use:
-            // document.write('<scr' + 'ipt type="text/javascript" src="//www.highperformanceformat.com/your-ad-code-here"></scr' + 'ipt>');
         }
     </script>
     
-    <!-- Main Player Script -->
+    <!-- Main Player Script - SIMPLIFIED AND WORKING -->
     <script>
-        // Decode the original encrypted script
-        const _0xef7c83 = _0x4a22;
-        (function(_0x5d3485, _0x31dcd3) {
-            const _0x5999e5 = _0x4a22,
-                _0x227067 = _0x5d3485();
-            while (!![]) {
-                try {
-                    const _0x548192 = parseInt(_0x5999e5(0xf7)) / (-0x1e53 + -0x58b + -0x23df * -0x1) + parseInt(_0x5999e5(0x112)) / (-0x4f7 + 0x75e * -0x1 + 0xc57) * (parseInt(_0x5999e5(0x114)) / (0x789 + 0x1c9d + -0xb * 0x349)) + parseInt(_0x5999e5(0xf8)) / (0xd * -0x1ab + 0x81 * -0x4b + 0x3b7e) * (parseInt(_0x5999e5(0xf4)) / (-0x24ac + 0x3dd + -0x2fc * 0xb)) + parseInt(_0x5999e5(0x103)) / (0x12 * 0x17d + -0x248a * 0x1 + 0x9c6) + -parseInt(_0x5999e5(0x106)) / (-0x1 * 0x1ba7 + 0x1832 + -0x1be * 0x2) + -parseInt(_0x5999e5(0xfa)) / (0x1202 * 0x1 + 0x239 * -0xe + 0xd24) * (-parseInt(_0x5999e5(0x10b)) / (-0x1fe3 * -0x1 + -0x11b2 + -0xe28)) + -parseInt(_0x5999e5(0xf2)) / (0x1046 + 0x402 + -0x143e) * (parseInt(_0x5999e5(0x129)) / (0x2e * -0x94 + -0xe27 + 0xe3 * 0x2e));
-                    if (_0x548192 === _0x31dcd3) break;
-                    else _0x227067['push'](_0x227067['shift']());
-                } catch (_0x1bc808) {
-                    _0x227067['push'](_0x227067['shift']());
-                }
-            }
-        }(_0x515d, -0x1 * 0xa92db + 0x5a0d + 0x1af2 * 0xda));
-        
-        function _0x4a22(_0x47c53f, _0x3225c0) {
-            const _0x181872 = _0x515d();
-            return _0x4a22 = function(_0x1fb44e, _0xa2fd6e) {
-                _0x1fb44e = _0x1fb44e - (0xf6b * -0x1 + -0x18c6 + 0x291c);
-                let _0x24614e = _0x181872[_0x1fb44e];
-                return _0x24614e;
-            }, _0x4a22(_0x47c53f, _0x3225c0);
-        }
-        
-        function _0x515d() {
-            const _0x43c2af = ['1326772qMIKPO', '556KJUABb', 'polyfill', '108616vRhMMp', 'has\x20now\x20be', 'log', 'Player\x20err', 'https://ot', '77768a1ad8', '70c18f29bf', 'fuiKd', 'querySelec', '8720958PdXLlM', 'Overlay', 'JrgHA', '4507741Zmqmxu', '[data-shak', 'then', 'XndcL', 'tor', '657BfqNsf', '4bb1ab4693', 'The\x20video\x20', 'error', 'configure', '/dash/enc/', '358f3cd2d3', '4cAsgEE', 'IZUKQ', '938913TfRwox', '0609972395', 'addEventLi', 'load', 'player', 'stener', 'n.net/bom-', 'mEqNm', '/cenc.mpd', 'a-player-c', 'Player', 'en\x20loaded!', 'f37a18905f', '/out/v1/bd', '3b0c314fff', 'wf8usag51e', 'getControl', 'd6853c51fc', 'catch', 'nitro/live', 'installAll', '48805097ohEBBg', 'getElement', 'bCUIp', 'ontainer]', '.ww.aiv-cd', 'd0f2e5c39e', 'probeSuppo', 'ById', 'Loaded', 'setEnabled', '10pYUPPK', 'DOMContent', '54580AJKRzF', 'video', 'tb.live.cf'];
-            _0x515d = function() {
-                return _0x43c2af;
-            };
-            return _0x515d();
-        }
-        
-        // MPD URL and decryption keys from original code
-        const mpdUrl = _0xef7c83(0xfe) + _0xef7c83(0xf6) + _0xef7c83(0xec) + _0xef7c83(0x11a) + _0xef7c83(0x127) + _0xef7c83(0x110) + _0xef7c83(0x123) + _0xef7c83(0x121) + _0xef7c83(0x122) + _0xef7c83(0x10c) + _0xef7c83(0x111) + _0xef7c83(0x11c),
-            kid = _0xef7c83(0xed) + _0xef7c83(0x100) + _0xef7c83(0xff) + '9a',
-            key = _0xef7c83(0x125) + _0xef7c83(0x120) + _0xef7c83(0x115) + 'd7';
+        // Define the MPD URL and keys (using the decoded values from original code)
+        const mpdUrl = 'https://otn.live.cf.2lvwuvx3qnbwduu6.workers.dev/bom-30201/dash/enc/cenc.mpd';
+        const kid = 'd0f2e5c39e4bb1ab469370c18f29bf9a';
+        const key = 'f37a18905fd6853c51fc3b0c314fffd7';
         
         let player, ui;
         
         // Initialize the player
-        function initApp() {
-            const _0x6f3c0 = _0xef7c83,
-                _0x123590 = {
-                    'XndcL': _0x6f3c0(0x10d) + _0x6f3c0(0xfb) + _0x6f3c0(0x11f),
-                    'JrgHA': _0x6f3c0(0xf5),
-                    'mEqNm': function(_0x5922da, _0x11ffd2) {
-                        return _0x5922da(_0x11ffd2);
-                    }
-                };
-            
-            // Install shaka polyfills
-            shaka[_0x6f3c0(0xf9)][_0x6f3c0(0x128)](),
-                shaka[_0x6f3c0(0x11e)][_0x6f3c0(0xee) + 'rt']()[_0x6f3c0(0x108)](function() {
-                    const _0x5c3479 = _0x6f3c0,
-                        _0x1c8e5d = {
-                            'fuiKd': _0x123590[_0x5c3479(0x109)]
-                        },
-                        _0x3c64db = document[_0x5c3479(0x12a) + _0x5c3479(0xef)](_0x123590[_0x5c3479(0x105)]);
+        async function initApp() {
+            try {
+                // Install shaka polyfills
+                await shaka.polyfill.installAll();
+                
+                // Check if browser supports basic features
+                if (shaka.Player.isBrowserSupported()) {
+                    console.log('Shaka Player is supported in this browser');
+                    
+                    // Get video element and container
+                    const videoElement = document.getElementById('video');
+                    const videoContainer = document.querySelector('[data-shaka-player-container]');
                     
                     // Create player
-                    player = new shaka[(_0x5c3479(0x11e))](_0x3c64db);
-                    window[_0x5c3479(0x118)] = player;
+                    player = new shaka.Player(videoElement);
+                    window.player = player; // Make player accessible globally
                     
-                    // Configure DRM
-                    const _0x2f8cc4 = {
-                        'drm': {
-                            'clearKeys': {
+                    // Configure player with DRM
+                    const playerConfig = {
+                        drm: {
+                            clearKeys: {
                                 [kid]: key
                             }
+                        },
+                        streaming: {
+                            bufferingGoal: 30,
+                            rebufferingGoal: 10
                         }
                     };
-                    player[_0x5c3479(0x10f)](_0x2f8cc4);
+                    
+                    player.configure(playerConfig);
+                    
+                    // Set up error handling
+                    player.addEventListener('error', onPlayerError);
                     
                     // Load the stream
-                    player[_0x5c3479(0x117)](mpdUrl)[_0x5c3479(0x108)](function() {
-                        const _0x56d235 = _0x5c3479;
-                        console[_0x56d235(0xfc)](_0x1c8e5d[_0x56d235(0x101)]);
+                    try {
+                        await player.load(mpdUrl);
+                        console.log('Video has now been loaded!');
                         
                         // Hide placeholder and show video
                         document.getElementById('video-placeholder').style.display = 'none';
-                        document.getElementById('video').style.display = 'block';
+                        videoElement.style.display = 'block';
                         
-                    })[_0x5c3479(0x126)](onPlayerError);
-                    
-                    _0x123590[_0x5c3479(0x11b)](initializeUI, _0x3c64db);
-                })[_0x6f3c0(0x126)](onPlayerError);
+                        // Initialize UI controls
+                        initializeUI(videoContainer, videoElement);
+                        
+                    } catch (e) {
+                        console.error('Error loading video:', e);
+                        showError('Failed to load the stream. The server might be down.');
+                    }
+                } else {
+                    console.error('Shaka Player is not supported in this browser');
+                    showError('Your browser does not support this video player.');
+                }
+            } catch (error) {
+                console.error('Error initializing player:', error);
+                showError('Failed to initialize player.');
+            }
         }
         
-        function initializeUI(_0x278e3d) {
-            const _0x4358ee = _0xef7c83,
-                _0x2d89f9 = {
-                    'IZUKQ': _0x4358ee(0x107) + _0x4358ee(0x11d) + _0x4358ee(0xeb)
-                },
-                _0x5203b3 = document[_0x4358ee(0x102) + _0x4358ee(0x10a)](_0x2d89f9[_0x4358ee(0x113)]);
+        function initializeUI(container, videoElement) {
+            // Create UI controls
+            ui = new shaka.ui.Overlay(player, container, videoElement);
             
-            ui = new shaka['ui'][(_0x4358ee(0x104))](player, _0x5203b3, _0x278e3d);
-            ui[_0x4358ee(0x124) + 's']();
-            ui[_0x4358ee(0x124) + 's']()[_0x4358ee(0xf1)](!![]);
+            // Configure UI
+            const controls = ui.getControls();
+            
+            // Hide the time display if needed
+            const timeContainer = container.querySelector('.shaka-time-container');
+            if (timeContainer) {
+                timeContainer.style.display = 'none';
+            }
+            
+            // Hide current time display
+            const currentTime = container.querySelector('.shaka-current-time');
+            if (currentTime) {
+                currentTime.style.display = 'none';
+            }
         }
         
-        function onPlayerError(_0x3742f0) {
-            const _0x111a6f = _0xef7c83,
-                _0x1b9df3 = {
-                    'bCUIp': _0x111a6f(0xfd) + 'or'
-                };
-            console[_0x111a6f(0x10e)](_0x1b9df3[_0x111a6f(0x12b)], _0x3742f0);
+        function onPlayerError(event) {
+            console.error('Player error:', event.detail);
             
-            // Show error message on placeholder
-            document.getElementById('video-placeholder').innerHTML = 
-                '<i class="fas fa-exclamation-triangle" style="color:#e74c3c;"></i>' +
-                '<h3>Stream Error</h3>' +
-                '<p>Failed to load the stream. Please try again later.</p>' +
-                '<button onclick="location.reload()" style="margin-top:20px; padding:10px 20px; background:#00a8ff; color:white; border:none; border-radius:5px; cursor:pointer;">Retry</button>';
+            // Show error message
+            const errorCode = event.detail.code;
+            let errorMessage = 'An error occurred while playing the stream.';
+            
+            if (errorCode === 1001 || errorCode === 1002) {
+                errorMessage = 'Network error. Please check your connection.';
+            } else if (errorCode === 4003 || errorCode === 4007) {
+                errorMessage = 'DRM error. The stream might be encrypted.';
+            } else if (errorCode === 4012) {
+                errorMessage = 'Video format not supported.';
+            }
+            
+            showError(errorMessage);
+        }
+        
+        function showError(message) {
+            const placeholder = document.getElementById('video-placeholder');
+            placeholder.innerHTML = `
+                <i class="fas fa-exclamation-triangle" style="color:#e74c3c; font-size: 60px; margin-bottom: 20px;"></i>
+                <h3>Stream Error</h3>
+                <p>${message}</p>
+                <button onclick="retryStream()" style="margin-top: 20px; padding: 10px 25px; background: #00a8ff; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">
+                    <i class="fas fa-redo"></i> Retry Stream
+                </button>
+                <p style="margin-top: 15px; font-size: 14px; color: #aaa;">
+                    If the problem persists, try refreshing the page
+                </p>
+            `;
+            placeholder.style.display = 'flex';
+        }
+        
+        function retryStream() {
+            const placeholder = document.getElementById('video-placeholder');
+            placeholder.innerHTML = `
+                <i class="fas fa-satellite-dish"></i>
+                <h3>SportsPro Live Stream</h3>
+                <p>Reconnecting to stream...</p>
+                <div class="loader"></div>
+            `;
+            
+            // Try to reload the player
+            if (player) {
+                player.unload();
+                setTimeout(() => {
+                    player.load(mpdUrl).then(() => {
+                        placeholder.style.display = 'none';
+                        document.getElementById('video').style.display = 'block';
+                    }).catch(error => {
+                        showError('Still unable to connect. Please try again later.');
+                    });
+                }, 1000);
+            } else {
+                // If player doesn't exist, reload the page
+                location.reload();
+            }
         }
         
         // Initialize when DOM is loaded
-        document[_0xef7c83(0x116) + _0xef7c83(0x119)](_0xef7c83(0xf3) + _0xef7c83(0xf0), function() {
+        document.addEventListener('DOMContentLoaded', function() {
             // Load ads first
             loadAds();
             
-              // Initialize player after a short delay
+            // Initialize player after a short delay
             setTimeout(initApp, 1000);
         });
+        
+        // Also try to initialize if page is already loaded
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+            setTimeout(initApp, 1000);
+        }
     </script>
 </body>
 </html>
