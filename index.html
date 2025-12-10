@@ -3,337 +3,545 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sportspro - Live TV</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏆</text></svg>">
-
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
-
+    <meta name="referrer" content="no-referrer">
+    <title>SportsPro Web | Live Channel</title>
+    
+    <!-- Shaka Player CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.1/controls.min.css" crossorigin="anonymous">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Disable dev tools script -->
+    <script disable-devtool-auto src='https://cdn.jsdelivr.net/npm/disable-devtool'></script>
+    
     <style>
-        /* Custom styles for a clean, modern look and feel */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #111827; /* bg-gray-900 */
-            background-image: radial-gradient(circle at top, #1f2937, #111827);
+            background-color: #000;
+            color: #fff;
+            overflow-x: hidden;
+            position: relative;
+            height: 100vh;
         }
-
-        /* Marquee Animation */
-        .marquee-content {
-            display: inline-block;
-            white-space: nowrap;
-            animation: marquee 30s linear infinite;
-            padding-left: 100%;
+        
+        /* Watermark */
+        .watermark {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            width: 120px;
+            opacity: 0.7;
+            pointer-events: none;
+            z-index: 100;
         }
-
-        @keyframes marquee {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-100%); }
+        
+        /* Player container */
+        .player-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
         }
-
-        /* Style for the active channel icon */
-        .channel-icon.active {
-            transform: scale(1.05);
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.8); /* Blue glow */
-            border-color: #3B82F6; /* border-blue-500 */
-            background-color: #374151; /* bg-gray-700 */
+        
+        #video {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
         }
-
-        /* Loading Spinner Animation */
-        .spinner {
-            border: 4px solid rgba(255, 255, 255, 0.3);
+        
+        /* Video placeholder for initial state */
+        .video-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #0c2461, #1e3799);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            z-index: 2;
+        }
+        
+        .video-placeholder i {
+            font-size: 80px;
+            color: #00a8ff;
+            margin-bottom: 20px;
+        }
+        
+        .video-placeholder h3 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+        
+        .video-placeholder p {
+            font-size: 18px;
+            color: #ccc;
+            max-width: 600px;
+            line-height: 1.5;
+        }
+        
+        /* Floating Telegram button */
+        .telegram-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+        }
+        
+        .telegram-btn {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #0088cc, #34b7f1);
             border-radius: 50%;
-            border-top-color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 6px 20px rgba(0, 136, 204, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+            text-decoration: none;
+        }
+        
+        .telegram-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(0, 136, 204, 0.7);
+        }
+        
+        .telegram-btn i {
+            font-size: 36px;
+            color: white;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 136, 204, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(0, 136, 204, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 136, 204, 0); }
+        }
+        
+        /* Channel info overlay */
+        .channel-info {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px 20px;
+            border-radius: 10px;
+            border-left: 4px solid #00a8ff;
+            z-index: 100;
+            max-width: 300px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .channel-name {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: #00a8ff;
+        }
+        
+        .channel-event {
+            font-size: 16px;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+        
+        .channel-status {
+            font-size: 14px;
+            color: #44bd32;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        /* Ad containers */
+        .ad-container {
+            position: fixed;
+            z-index: 200;
+            width: 100%;
+        }
+        
+        .ad-top {
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: rgba(10, 10, 10, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 1px solid #333;
+        }
+        
+        .ad-bottom {
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: rgba(10, 10, 10, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-top: 1px solid #333;
+        }
+        
+        .ad-label {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #ccc;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        
+        /* Loading animation */
+        .loader {
             width: 50px;
             height: 50px;
-            animation: spin 1s ease-in-out infinite;
+            border: 5px solid rgba(0, 168, 255, 0.2);
+            border-top: 5px solid #00a8ff;
+            border-radius: 50%;
+            margin: 20px auto;
+            animation: spin 1s linear infinite;
         }
-
+        
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Hide shaka player time display */
+        .shaka-current-time, .shaka-time-container { 
+            display: none !important; 
+        }
+        
+        .shaka-spinner-container { 
+            display: none !important; 
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .watermark {
+                width: 80px;
+                top: 10px;
+                left: 10px;
+            }
+            
+            .video-placeholder h3 {
+                font-size: 24px;
+            }
+            
+            .video-placeholder p {
+                font-size: 16px;
+                padding: 0 15px;
+            }
+            
+            .telegram-float {
+                bottom: 20px;
+                right: 20px;
+            }
+            
+            .telegram-btn {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .telegram-btn i {
+                font-size: 28px;
+            }
+            
+            .channel-info {
+                bottom: 20px;
+                left: 20px;
+                max-width: 250px;
+                padding: 12px 15px;
+            }
+            
+            .channel-name {
+                font-size: 18px;
+            }
+            
+            .channel-event {
+                font-size: 14px;
+            }
+            
+            .ad-top, .ad-bottom {
+                height: 80px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .channel-info {
+                bottom: 100px;
+                max-width: 200px;
+            }
+            
+            .ad-top, .ad-bottom {
+                height: 70px;
+            }
         }
     </style>
-
-<script type='text/javascript' src='//pl27780061.revenuecpmgate.com/46/26/dd/4626dd9839d48431daa9701f14af0d96.js'></script>
 </head>
-<body class="text-white flex items-center justify-center min-h-screen p-4">
-
-    <div class="w-full max-w-5xl mx-auto">
-        <header>
-            <h1 class="text-4xl sm:text-5xl font-black text-center my-6 sm:my-8 tracking-tight flex items-center justify-center gap-3">
-                <svg class="w-10 h-10 sm:w-12 sm:h-12 text-blue-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M13 18.067V21a1 1 0 0 1-2 0v-2.933a9.006 9.006 0 0 1-5.11-4.787 1 1 0 0 1 1.789-.894 7.005 7.005 0 0 0 10.642 0 1 1 0 0 1 1.789.894A9.006 9.006 0 0 1 13 18.067zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0-6a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM18.887 2.053a1 1 0 0 1 .114 1.414l-2.07 2.07a1 1 0 0 1-1.414-1.414l2.07-2.07a1 1 0 0 1 1.3-.001zM4.999 5.537a1 1 0 0 1-1.414-1.414l2.07-2.07a1 1 0 0 1 1.415 1.415l-2.07 2.07z"/>
-                </svg>
-                <span class="bg-gradient-to-r from-blue-400 via-sky-300 to-blue-400 bg-clip-text text-transparent">
-                    Sportspro
-                </span>
-            </h1>
-        </header>
-
-        <div class="my-6">
-            <div id="ad-banner-1" class="w-full text-center min-h-[90px] bg-gray-800 rounded-lg p-2 flex items-center justify-center text-gray-400">
-               <script type="text/javascript">
-                atOptions = {
-                    'key' : 'a6f017425dd8529d0dc16d15a5a2ee17',
-                    'format' : 'iframe',
-                    'height' : 60,
-                    'width' : 468,
-                    'params' : {}
-                };
-            </script>
-            <script type="text/javascript" src="//www.highperformanceformat.com/a6f017425dd8529d0dc16d15a5a2ee17/invoke.js"></script>
-            </div>
-        </div>
-
-        <main>
-            <div id="player-container" class="relative w-full aspect-video bg-black rounded-xl shadow-2xl overflow-hidden border-2 border-gray-700 flex items-center justify-center">
-                <video id="video-player" class="w-full h-full" controls poster="https://placehold.co/1280x720/111827/FFFFFF?text=Select+a+Channel"></video>
-                <iframe id="iframe-player" class="w-full h-full hidden" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
-                <div id="loading-overlay" class="absolute inset-0 bg-black bg-opacity-70 flex-col items-center justify-center hidden">
-                    <div class="spinner"></div>
-                    <p class="mt-4 text-lg font-semibold">Loading Channel...</p>
-                </div>
-            </div>
-
-            <div class="mt-8">
-                <div id="ad-native-1" class="w-full p-4 bg-gray-800 rounded-lg text-center text-gray-400">
-                    <script async="async" data-cfasync="false" src="//pl27779719.revenuecpmgate.com/89bf79c9a7ab15688aed81611ffa7769/invoke.js"></script>
-                    <div id="container-89bf79c9a7ab15688aed81611ffa7769"></div>
-                </div>
-            </div>
-
-            <div id="channel-section">
-                <h2 class="text-xl font-bold mt-8 mb-4 text-blue-300 tracking-wider uppercase">Sports Channels</h2>
-                <div id="channel-grid-1" class="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-3 sm:gap-4">
-                    </div>
-
-                <h2 class="text-xl font-bold mt-8 mb-4 text-blue-300 tracking-wider uppercase">Live Cricket</h2>
-                <div id="channel-grid-2" class="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-3 sm:gap-4">
-                    </div>
-            </div>
-
-            <div class="mt-8 bg-gray-800 rounded-lg shadow-lg overflow-hidden">
-                <div class="relative flex overflow-x-hidden">
-                    <p class="marquee-content py-3 text-gray-300 font-semibold tracking-wider">
-                        Welcome to Sportspro TV. Your home for the best sports action. All day, every day.      Welcome to Sportspro TV. Your home for the best sports action. All day, every day.     
-                    </p>
-                </div>
-            </div>
-        </main>
-
-        <footer class="text-center py-8">
-            <p class="text-gray-500 text-sm">© 2025 Sportspro. All Rights Reserved.</p>
-            <p class="text-gray-600 text-xs mt-1">Disclaimer: This website does not host, upload, or distribute any videos or channels. All content available on this site belongs to its respective copyright owners. We respect the rights of content creators and provide this material for reference and educational purposes only.</p>
-        </footer>
+<body>
+    <!-- Watermark -->
+    <img src="https://i.imgur.com/LofbqIP.png" alt="SportsPro" class="watermark">
+    
+    <!-- Top Ad -->
+    <div class="ad-container ad-top">
+        <div class="ad-label">Advertisement</div>
+        <!-- Adsterra Banner Ad Code -->
+        <div id="container-ad-top"></div>
     </div>
-
-    <div class="fixed bottom-6 right-6 z-50 flex flex-col space-y-4">
-        <a href="https://wa.me/1234567890" target="_blank" rel="noopener noreferrer" title="Contact on WhatsApp" class="flex items-center justify-center w-14 h-14 bg-green-500 rounded-full shadow-lg transition-transform duration-300 hover:scale-110 hover:shadow-xl">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 4.315 1.919 6.066l-1.225 4.485 4.635-1.218z"/></svg>
-        </a>
-        <a href="https://t.me/sportsproapp" target="_blank" rel="noopener noreferrer" title="Contact on Telegram" class="flex items-center justify-center w-14 h-14 bg-sky-500 rounded-full shadow-lg transition-transform duration-300 hover:scale-110 hover:shadow-xl">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="currentColor"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.62 11.93c-.58-.19-.59-.54.1-.73l16-6.1c.39-.15.73.09.6.52l-2.72 12.81c-.14.65-.54.81-1.08.5L12 18.15l-1.89 1.8c-.23.23-.42.41-.73.41z"/></svg>
-        </a>
-    </div>
-    <div id="image-popup-overlay" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 hidden p-4">
-        <div class="relative bg-gray-800 p-3 rounded-lg shadow-xl max-w-lg w-full">
-            <img id="popup-image" src="" alt="Promotional Image" class="w-full h-auto rounded-md">
-            <button id="close-popup-btn" class="absolute top-0 right-0 mt-4 mr-4 bg-gray-900/70 text-white rounded-full w-8 h-8 flex items-center justify-center text-lg font-bold transition-transform hover:scale-110">
-                ×
-            </button>
+    
+    <!-- Player Container -->
+    <div class="player-container">
+        <div data-shaka-player-container style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
+            <div class="video-placeholder" id="video-placeholder">
+                <i class="fas fa-satellite-dish"></i>
+                <h3>SportsPro Live Stream</h3>
+                <p>High-quality live streaming. The player will load automatically.</p>
+                <div class="loader"></div>
+                <p style="margin-top: 20px; font-size: 14px; color: #aaa;">
+                    If the stream doesn't load, please refresh the page
+                </p>
+            </div>
+            <video autoplay muted data-shaka-player id="video" poster="https://imgur.com/LofbqIP" style="width:100%; height:100%; display: none;"></video>
         </div>
     </div>
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    // --- DOM ELEMENTS ---
-    const videoPlayer = document.getElementById('video-player');
-    const iframePlayer = document.getElementById('iframe-player');
-    const channelSection = document.getElementById('channel-section');
-    const channelGrid1 = document.getElementById('channel-grid-1');
-    const channelGrid2 = document.getElementById('channel-grid-2');
-    const loadingOverlay = document.getElementById('loading-overlay');
-
-    let hls = new Hls();
-    let activeChannelElement = null;
-
-    // --- CHANNEL DATA ---
-    // --- FIX: Removed the trailing comma at the end of this list that was causing a script error ---
-    const channels = [
-        // === Sony Network ===
-        { name: 'Sony Ten 1', icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7zcC3dk8mCRySagNTzg3WLd1Adugyc1serpGlbc6CoQ&s=10', src: 'https://allinonereborn.xyz/opplextv-web1/live.php?id=167570', type: 'hls', category: 'sports' },
-        { name: 'Sony Ten 2', icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjOr34--G7AMaVv_DMcEmuKkVFY6gX-obJhRuiW1BRDQ&s=10', src: 'https://allinonereborn.xyz/opplextv-web1/live.php?id=167571', type: 'hls', category: 'sports' },
-        { name: 'Sony Ten 3', icon: 'https://static.wikia.nocookie.net/logopedia/images/f/ff/Sony_Sports_Ten_3.png', src: 'https://allinonereborn.xyz/opplextv-web1/live.php?id=167572', type: 'hls', category: 'sports' },
-        { name: 'World cup', icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWsMoXJT3cB1ybFa1-732NkG5vAZ8nKrNxfThcEm-6Yw&s=10', src: 'https://allinonereborn.xyz/airteltv-web/live.php?id=276740', type: 'embed', category: 'sports' },
+    
+    <!-- Channel Info -->
+    <div class="channel-info">
+        <div class="channel-name">SPORTS PRO LIVE</div>
+        <div class="channel-event">Live Sports Streaming 24/7</div>
+        <div class="channel-status">
+            <i class="fas fa-circle" style="font-size: 10px;"></i>
+            <span>LIVE NOW</span>
+        </div>
+    </div>
+    
+    <!-- Bottom Ad -->
+    <div class="ad-container ad-bottom">
+        <div class="ad-label">Advertisement</div>
+        <!-- Adsterra Banner Ad Code -->
+        <div id="container-ad-bottom"></div>
+    </div>
+    
+    <!-- Floating Telegram Button -->
+    <div class="telegram-float">
+        <a href="https://t.me/sportsproweb" target="_blank" class="telegram-btn">
+            <i class="fab fa-telegram"></i>
+        </a>
+    </div>
+    
+    <!-- Shaka Player Script -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.1/shaka-player.ui.min.js" crossorigin="anonymous"></script>
+    
+    <!-- Adsterra Ad Scripts -->
+    <script type="text/javascript">
+        // Adsterra Ad Code Placeholders
+        // Replace these with actual Adsterra codes from your account
         
-        // === Star Network ===
-        { name: 'Star Sports 1', icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGiiXn3ielMWWsQa326Ki8DtLa687rH3DbG8zK0fqsdA&s=10', src: 'https://rips.in/player.php?ch=3', type: 'embed', category: 'sports' },
-        { name: 'Star Sports 2', icon: 'https://static.wikia.nocookie.net/logopedia/images/3/30/STAR_Sports_2_logo.png', src: 'https://allinonereborn.xyz/opplextv-web1/live.php?id=382205', type: 'hls', category: 'sports' },
-        { name: 'Star Sports Tamil', icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5gg6U_lTH0p6SiLrEBs4ib-BH3Or0Oh8zIWAILnE5Fw&s=10', src: 'https://allinonereborn.xyz/airteltv-web/live.php?id=276742', type: 'hls', category: 'sports' },
-
-        // === Cricket Specific ===
-        { name: 'Willow Cricket', icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcFtKCvqTk-dRIE2pfIZC2BcNF3Ho6kFoCuve98peO3_323g1IbpZp2zuA&s=10', src: 'https://rips.in/player.php?ch=6', type: 'embed', category: 'cricket' },
-        { name: 'Astro Cricket', icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJ201ecVQkd0ItU7_BC5AJk4zsHXiwtEIkPYZJPH4dbQ&s=10', src: 'https://allinonereborn.xyz/opplextv-web1/live.php?id=167581', type: 'hls', category: 'cricket' },
-        { name: 'Willow Cricket', icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcFtKCvqTk-dRIE2pfIZC2BcNF3Ho6kFoCuve98peO3_323g1IbpZp2zuA&s=10', src: 'https://hex-seven.vercel.app/drmplay.html?mpd=https%3A%2F%2Fottb.live.cf.ww.aiv-cdn.net%2Fiad-nitro%2Flive%2Fclients%2Fdash%2Fenc%2Ff60kqesunw%2Fout%2Fv1%2Fa435ed7a00f947deb4369b46d8f2fb70%2Fcenc.mpd&keyid=1779c27b9d077a3ba0c9cc1bb9a94b9f&key=cc5cf3b7928fb9e0a1ee6a8b566f0a8e', type: 'embed', category: 'cricket' },
+        // Top banner ad
+        var atOptions_top = {
+            'key' : 'your_top_banner_key_here',
+            'format' : 'iframe',
+            'height' : 90,
+            'width' : 728,
+            'params' : {}
+        };
         
-        // === Other International Sports - REPLACE '#' WITH YOUR STREAM URL ===
-        { name: 'Star hindi', icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGq-NU_4rFvyce9BQJN0Nf9JVNw3kWd9VccA&s', src: 'https://watch.dtvxtream.com/crichd-iframe?id=starhindi', type: 'embed', category: 'sports' },
-        { name: 'Sky Sports', icon: 'https://cdn.skymedia.co.uk/wp-content/uploads/2020/09/Sky-Sports-Cricket-2020-logo-250.png', src: 'https://watch.dtvxtream.com/crichd-iframe?id=skyscric', type: 'embed', category: 'sports' },
-        { name: 'WWE', icon: 'https://progresswrestling.com/wp-content/uploads/2025/08/Untitled-design-11.png', src: 'https://dlhd.dad/stream/stream-172.php', type: 'embed', category: 'sports' },
-        { name: 'TNT 1', icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXIWzB2dOrhY7yATDQZbxShHFXh4RLeep9xA&usqp=CAU', src: 'https://watch.dtvxtream.com/crichd-iframe?id=bbtsp1', type: 'embed', category: 'sports' },
-
-{ name: 'TNT 2', icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXIWzB2dOrhY7yATDQZbxShHFXh4RLeep9xA&usqp=CAU', src: 'https://watch.dtvxtream.com/crichd-iframe?id=bbtsp2', type: 'embed', category: 'sports' },
-
-{ name: 'TNT 3', icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXIWzB2dOrhY7yATDQZbxShHFXh4RLeep9xA&usqp=CAU', src: 'https://watch.dtvxtream.com/crichd-iframe?id=bbtsp3', type: 'embed', category: 'sports' },
-
-        { name: 'PTV Sports', icon: 'https://upload.wikimedia.org/wikipedia/en/thumb/6/6f/PTV_Sports_logo.svg/1200px-PTV_Sports_logo.svg.png', src: '#', type: 'hls', category: 'cricket' },
-        { name: 'DD Sports', icon: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/DD_Sports_logo.svg/1200px-DD_Sports_logo.svg.png', src: '#', type: 'hls', category: 'cricket' }
-    ];
-
-    // --- FUNCTIONS ---
-
-    function populateChannelGrid() {
-        channelGrid1.innerHTML = '';
-        channelGrid2.innerHTML = '';
-
-        channels.forEach((channel) => {
-            const channelDiv = document.createElement('div');
-            channelDiv.className = 'channel-icon flex flex-col items-center p-2 bg-gray-800/50 rounded-lg shadow-md cursor-pointer transition-all duration-300 hover:scale-105 hover:bg-gray-700/70 border-2 border-transparent';
-            channelDiv.dataset.src = channel.src;
-            channelDiv.dataset.type = channel.type;
-
-            const imgContainer = document.createElement('div');
-            imgContainer.className = 'aspect-square w-full';
-
-            const img = document.createElement('img');
-            img.src = channel.icon;
-            img.alt = channel.name;
-            // Using object-contain is better for logos so they don't get cut off
-            img.className = 'w-full h-full object-contain rounded-md p-1'; 
-
-            imgContainer.appendChild(img);
-
-            const title = document.createElement('span');
-            title.className = 'block text-sm font-semibold mt-2 text-center text-gray-200 truncate w-full';
-            title.textContent = channel.name;
-
-            channelDiv.appendChild(imgContainer);
-            channelDiv.appendChild(title);
-
-            if (channel.category === 'sports') {
-                channelGrid1.appendChild(channelDiv);
-            } else if (channel.category === 'cricket') {
-                channelGrid2.appendChild(channelDiv);
-            }
-        });
-    }
-
-    function loadVideo(src, type) {
-        // Alert user if the channel source is a placeholder
-        if (src === '#') {
-            alert('Stream source for this channel is not available yet. Please check back later.');
-            return;
+        // Bottom banner ad
+        var atOptions_bottom = {
+            'key' : 'your_bottom_banner_key_here',
+            'format' : 'iframe',
+            'height' : 90,
+            'width' : 728,
+            'params' : {}
+        };
+        
+        // Popunder ad (will be triggered after page load)
+        var atOptions_pop = {
+            'key' : 'your_popunder_key_here',
+            'format' : 'iframe',
+            'height' : 600,
+            'width' : 160,
+            'params' : {}
+        };
+        
+        // Function to load ads
+        function loadAds() {
+            // Load top banner
+            document.getElementById('container-ad-top').innerHTML = 
+                '<div style="background:rgba(26, 26, 46, 0.9); color:#fff; padding:15px; border-radius:5px; text-align:center; width:728px; height:90px; display:flex; align-items:center; justify-content:center;">' +
+                '<div>Adsterra Top Banner Ad (728x90)<br><small>Replace with actual Adsterra code</small></div>' +
+                '</div>';
+            
+            // Load bottom banner
+            document.getElementById('container-ad-bottom').innerHTML = 
+                '<div style="background:rgba(26, 26, 46, 0.9); color:#fff; padding:15px; border-radius:5px; text-align:center; width:728px; height:90px; display:flex; align-items:center; justify-content:center;">' +
+                '<div>Adsterra Bottom Banner Ad (728x90)<br><small>Replace with actual Adsterra code</small></div>' +
+                '</div>';
+            
+            // Trigger popunder ad after 10 seconds
+            setTimeout(function() {
+                // This is where the actual Adsterra popunder code would go
+                console.log("Popunder ad would trigger here");
+                
+                // For demo, we'll just log it
+                var popunderHtml = '<div style="display:none;">Popunder ad placeholder</div>';
+                var div = document.createElement('div');
+                div.innerHTML = popunderHtml;
+                document.body.appendChild(div);
+            }, 10000);
+            
+            // In actual implementation, you would use:
+            // document.write('<scr' + 'ipt type="text/javascript" src="//www.highperformanceformat.com/your-ad-code-here"></scr' + 'ipt>');
         }
-
-        loadingOverlay.style.display = 'flex';
-        videoPlayer.poster = '';
-        videoPlayer.pause();
-        hls.destroy(); // Properly destroy previous HLS instance
-        iframePlayer.src = 'about:blank';
-
-        if (type === 'hls') {
-            videoPlayer.classList.remove('hidden');
-            iframePlayer.classList.add('hidden');
-
-            if (Hls.isSupported()) {
-                hls = new Hls();
-                hls.loadSource(src);
-                hls.attachMedia(videoPlayer);
-                hls.on(Hls.Events.MANIFEST_PARSED, () => {
-                    videoPlayer.play().catch(e => console.error("Autoplay failed:", e));
-                    loadingOverlay.style.display = 'none';
-                });
-                hls.on(Hls.Events.ERROR, function(event, data) {
-                   if (data.fatal) {
-                     console.error('HLS fatal error:', data);
-                     loadingOverlay.style.display = 'none';
-                   }
-                });
-            } else if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) {
-                videoPlayer.src = src;
-                videoPlayer.addEventListener('loadedmetadata', () => {
-                    videoPlayer.play().catch(e => console.error("Autoplay failed:", e));
-                    loadingOverlay.style.display = 'none';
-                });
+    </script>
+    
+    <!-- Main Player Script -->
+    <script>
+        // Decode the original encrypted script
+        const _0xef7c83 = _0x4a22;
+        (function(_0x5d3485, _0x31dcd3) {
+            const _0x5999e5 = _0x4a22,
+                _0x227067 = _0x5d3485();
+            while (!![]) {
+                try {
+                    const _0x548192 = parseInt(_0x5999e5(0xf7)) / (-0x1e53 + -0x58b + -0x23df * -0x1) + parseInt(_0x5999e5(0x112)) / (-0x4f7 + 0x75e * -0x1 + 0xc57) * (parseInt(_0x5999e5(0x114)) / (0x789 + 0x1c9d + -0xb * 0x349)) + parseInt(_0x5999e5(0xf8)) / (0xd * -0x1ab + 0x81 * -0x4b + 0x3b7e) * (parseInt(_0x5999e5(0xf4)) / (-0x24ac + 0x3dd + -0x2fc * 0xb)) + parseInt(_0x5999e5(0x103)) / (0x12 * 0x17d + -0x248a * 0x1 + 0x9c6) + -parseInt(_0x5999e5(0x106)) / (-0x1 * 0x1ba7 + 0x1832 + -0x1be * 0x2) + -parseInt(_0x5999e5(0xfa)) / (0x1202 * 0x1 + 0x239 * -0xe + 0xd24) * (-parseInt(_0x5999e5(0x10b)) / (-0x1fe3 * -0x1 + -0x11b2 + -0xe28)) + -parseInt(_0x5999e5(0xf2)) / (0x1046 + 0x402 + -0x143e) * (parseInt(_0x5999e5(0x129)) / (0x2e * -0x94 + -0xe27 + 0xe3 * 0x2e));
+                    if (_0x548192 === _0x31dcd3) break;
+                    else _0x227067['push'](_0x227067['shift']());
+                } catch (_0x1bc808) {
+                    _0x227067['push'](_0x227067['shift']());
+                }
             }
-        } else if (type === 'embed') {
-            videoPlayer.classList.add('hidden');
-            iframePlayer.classList.remove('hidden');
-            iframePlayer.src = src;
-            iframePlayer.onload = () => {
-                loadingOverlay.style.display = 'none';
+        }(_0x515d, -0x1 * 0xa92db + 0x5a0d + 0x1af2 * 0xda));
+        
+        function _0x4a22(_0x47c53f, _0x3225c0) {
+            const _0x181872 = _0x515d();
+            return _0x4a22 = function(_0x1fb44e, _0xa2fd6e) {
+                _0x1fb44e = _0x1fb44e - (0xf6b * -0x1 + -0x18c6 + 0x291c);
+                let _0x24614e = _0x181872[_0x1fb44e];
+                return _0x24614e;
+            }, _0x4a22(_0x47c53f, _0x3225c0);
+        }
+        
+        function _0x515d() {
+            const _0x43c2af = ['1326772qMIKPO', '556KJUABb', 'polyfill', '108616vRhMMp', 'has\x20now\x20be', 'log', 'Player\x20err', 'https://ot', '77768a1ad8', '70c18f29bf', 'fuiKd', 'querySelec', '8720958PdXLlM', 'Overlay', 'JrgHA', '4507741Zmqmxu', '[data-shak', 'then', 'XndcL', 'tor', '657BfqNsf', '4bb1ab4693', 'The\x20video\x20', 'error', 'configure', '/dash/enc/', '358f3cd2d3', '4cAsgEE', 'IZUKQ', '938913TfRwox', '0609972395', 'addEventLi', 'load', 'player', 'stener', 'n.net/bom-', 'mEqNm', '/cenc.mpd', 'a-player-c', 'Player', 'en\x20loaded!', 'f37a18905f', '/out/v1/bd', '3b0c314fff', 'wf8usag51e', 'getControl', 'd6853c51fc', 'catch', 'nitro/live', 'installAll', '48805097ohEBBg', 'getElement', 'bCUIp', 'ontainer]', '.ww.aiv-cd', 'd0f2e5c39e', 'probeSuppo', 'ById', 'Loaded', 'setEnabled', '10pYUPPK', 'DOMContent', '54580AJKRzF', 'video', 'tb.live.cf'];
+            _0x515d = function() {
+                return _0x43c2af;
             };
+            return _0x515d();
         }
-    }
-
-    function setActiveChannel(element) {
-        if (activeChannelElement) {
-            activeChannelElement.classList.remove('active');
+        
+        // MPD URL and decryption keys from original code
+        const mpdUrl = _0xef7c83(0xfe) + _0xef7c83(0xf6) + _0xef7c83(0xec) + _0xef7c83(0x11a) + _0xef7c83(0x127) + _0xef7c83(0x110) + _0xef7c83(0x123) + _0xef7c83(0x121) + _0xef7c83(0x122) + _0xef7c83(0x10c) + _0xef7c83(0x111) + _0xef7c83(0x11c),
+            kid = _0xef7c83(0xed) + _0xef7c83(0x100) + _0xef7c83(0xff) + '9a',
+            key = _0xef7c83(0x125) + _0xef7c83(0x120) + _0xef7c83(0x115) + 'd7';
+        
+        let player, ui;
+        
+        // Initialize the player
+        function initApp() {
+            const _0x6f3c0 = _0xef7c83,
+                _0x123590 = {
+                    'XndcL': _0x6f3c0(0x10d) + _0x6f3c0(0xfb) + _0x6f3c0(0x11f),
+                    'JrgHA': _0x6f3c0(0xf5),
+                    'mEqNm': function(_0x5922da, _0x11ffd2) {
+                        return _0x5922da(_0x11ffd2);
+                    }
+                };
+            
+            // Install shaka polyfills
+            shaka[_0x6f3c0(0xf9)][_0x6f3c0(0x128)](),
+                shaka[_0x6f3c0(0x11e)][_0x6f3c0(0xee) + 'rt']()[_0x6f3c0(0x108)](function() {
+                    const _0x5c3479 = _0x6f3c0,
+                        _0x1c8e5d = {
+                            'fuiKd': _0x123590[_0x5c3479(0x109)]
+                        },
+                        _0x3c64db = document[_0x5c3479(0x12a) + _0x5c3479(0xef)](_0x123590[_0x5c3479(0x105)]);
+                    
+                    // Create player
+                    player = new shaka[(_0x5c3479(0x11e))](_0x3c64db);
+                    window[_0x5c3479(0x118)] = player;
+                    
+                    // Configure DRM
+                    const _0x2f8cc4 = {
+                        'drm': {
+                            'clearKeys': {
+                                [kid]: key
+                            }
+                        }
+                    };
+                    player[_0x5c3479(0x10f)](_0x2f8cc4);
+                    
+                    // Load the stream
+                    player[_0x5c3479(0x117)](mpdUrl)[_0x5c3479(0x108)](function() {
+                        const _0x56d235 = _0x5c3479;
+                        console[_0x56d235(0xfc)](_0x1c8e5d[_0x56d235(0x101)]);
+                        
+                        // Hide placeholder and show video
+                        document.getElementById('video-placeholder').style.display = 'none';
+                        document.getElementById('video').style.display = 'block';
+                        
+                    })[_0x5c3479(0x126)](onPlayerError);
+                    
+                    _0x123590[_0x5c3479(0x11b)](initializeUI, _0x3c64db);
+                })[_0x6f3c0(0x126)](onPlayerError);
         }
-        element.classList.add('active');
-        activeChannelElement = element;
-    }
-
-    // --- EVENT LISTENERS ---
-    channelSection.addEventListener('click', (event) => {
-        const clickedChannel = event.target.closest('.channel-icon');
-        if (clickedChannel) {
-            const src = clickedChannel.dataset.src;
-            const type = clickedChannel.dataset.type;
-            loadVideo(src, type);
-            setActiveChannel(clickedChannel);
+        
+        function initializeUI(_0x278e3d) {
+            const _0x4358ee = _0xef7c83,
+                _0x2d89f9 = {
+                    'IZUKQ': _0x4358ee(0x107) + _0x4358ee(0x11d) + _0x4358ee(0xeb)
+                },
+                _0x5203b3 = document[_0x4358ee(0x102) + _0x4358ee(0x10a)](_0x2d89f9[_0x4358ee(0x113)]);
+            
+            ui = new shaka['ui'][(_0x4358ee(0x104))](player, _0x5203b3, _0x278e3d);
+            ui[_0x4358ee(0x124) + 's']();
+            ui[_0x4358ee(0x124) + 's']()[_0x4358ee(0xf1)](!![]);
         }
-    });
-
-    // --- INITIALIZATION ---
-    populateChannelGrid();
-
-    // =============== POPUP IMAGE LOGIC ===============
-    const popupImageUrl = 'https://bsmedia.business-standard.com/_media/bs/img/article/2025-10/13/full/1760348758-7789.jpg';
-    const popupOverlay = document.getElementById('image-popup-overlay');
-    const popupImage = document.getElementById('popup-image');
-    const closePopupButton = document.getElementById('close-popup-btn');
-
-    function showPopup() {
-        if (popupImageUrl && popupOverlay) {
-            popupImage.src = popupImageUrl;
-            popupOverlay.classList.remove('hidden');
+        
+        function onPlayerError(_0x3742f0) {
+            const _0x111a6f = _0xef7c83,
+                _0x1b9df3 = {
+                    'bCUIp': _0x111a6f(0xfd) + 'or'
+                };
+            console[_0x111a6f(0x10e)](_0x1b9df3[_0x111a6f(0x12b)], _0x3742f0);
+            
+            // Show error message on placeholder
+            document.getElementById('video-placeholder').innerHTML = 
+                '<i class="fas fa-exclamation-triangle" style="color:#e74c3c;"></i>' +
+                '<h3>Stream Error</h3>' +
+                '<p>Failed to load the stream. Please try again later.</p>' +
+                '<button onclick="location.reload()" style="margin-top:20px; padding:10px 20px; background:#00a8ff; color:white; border:none; border-radius:5px; cursor:pointer;">Retry</button>';
         }
-    }
-
-    function hidePopup() {
-        if (popupOverlay) {
-            popupOverlay.classList.add('hidden');
-        }
-    }
-
-    if (closePopupButton) {
-        closePopupButton.addEventListener('click', hidePopup);
-    }
-    if (popupOverlay) {
-        popupOverlay.addEventListener('click', (event) => {
-            if (event.target === popupOverlay) {
-                hidePopup();
-            }
+        
+        // Initialize when DOM is loaded
+        document[_0xef7c83(0x116) + _0xef7c83(0x119)](_0xef7c83(0xf3) + _0xef7c83(0xf0), function() {
+            // Load ads first
+            loadAds();
+            
+              // Initialize player after a short delay
+            setTimeout(initApp, 1000);
         });
-    }
-
-    showPopup();
-
-});
-</script>
+    </script>
 </body>
 </html>
